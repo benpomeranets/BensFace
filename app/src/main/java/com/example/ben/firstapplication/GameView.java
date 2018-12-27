@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.graphics.Color;
@@ -18,16 +19,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private CharacterSprite characterSprite;
 
-    public static int xVelocity = 10;
-    public static int yVelocity = 5;
-    private int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-    private int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+    public static int xVelocity = 5;
+    public static int yVelocity = -10;
+    public static int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+    public static int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
     public static float screenWidthToHeightRatio;
 
-    private int imageWidth = 500;
+    public static int timer = 0;
+    public static int timeSpend = 25;
+
+    private int imageWidth = 250;
 
     public static int[] centerX = new int[2];
+
+    Point p;
 
     public GameView(Context context){
 
@@ -36,7 +42,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
 
         centerX[0] = (screenWidth / 2) - (imageWidth / 2);
-        centerX[1] = (screenHeight / 2);
 
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
@@ -72,16 +77,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update(){
+
         if(!MainActivity.isPaused && MainActivity.started) {
             CharacterSprite.x += xVelocity;
             CharacterSprite.y += yVelocity;
         }else{
 
         }
-        if ((CharacterSprite.x > screenWidth - CharacterSprite.scaledImage.getWidth()) || (CharacterSprite.x < 0)) {
+        if (((CharacterSprite.x > screenWidth - CharacterSprite.scaledImage.getWidth()) && xVelocity > 0) || ((CharacterSprite.x < 0) && xVelocity < 0)) {
             xVelocity = xVelocity * -1;
         }
-        if ((CharacterSprite.y > screenHeight - CharacterSprite.scaledImage.getHeight()) || (CharacterSprite.y < 0)) {
+        if (((CharacterSprite.y > screenHeight - CharacterSprite.scaledImage.getHeight()) && yVelocity > 0) || ((CharacterSprite.y < 0) && yVelocity < 0)) {
             yVelocity = yVelocity * -1;
         }
     }

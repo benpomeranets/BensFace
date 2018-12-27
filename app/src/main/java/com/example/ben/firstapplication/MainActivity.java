@@ -9,13 +9,18 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainActivity extends Activity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener{
+public class MainActivity extends Activity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
 
     private int lastXVel = 0;
     private int lastYVel = 0;
 
     public static boolean isPaused = false;
     public static boolean started = false;
+
+    private int[] beg = new int[2];
+    private int[] end = new int[2];
+
+    public static boolean isFlinging = false;
 
     private GestureDetectorCompat gestureDetectorCompat;
 

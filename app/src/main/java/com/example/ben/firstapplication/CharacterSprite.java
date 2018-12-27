@@ -17,6 +17,7 @@ public class CharacterSprite {
         this.imageWidth = imageWidth;
         imageHeight = imageWidth * GameView.screenWidthToHeightRatio;
         intImageHeight = (int) Math.ceil(imageHeight);
+        GameView.centerX[1] = Math.round((GameView.screenHeight / 2) - (intImageHeight / 2));
         image = bmp;
         scaledImage = Bitmap.createScaledBitmap(image, imageWidth, intImageHeight, true);
         x = GameView.centerX[0];
