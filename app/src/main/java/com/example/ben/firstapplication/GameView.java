@@ -18,17 +18,25 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private CharacterSprite characterSprite;
 
-    private int xVelocity = 10;
-    private int yVelocity = 5;
+    public static int xVelocity = 10;
+    public static int yVelocity = 5;
     private int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
     private int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
-    public static int screenWidthToHeightRatio;
+    public static float screenWidthToHeightRatio;
+
+    private int imageWidth = 500;
+
+    public static int[] centerX = new int[2];
 
     public GameView(Context context){
+
         super(context);
 
         getHolder().addCallback(this);
+
+        centerX[0] = (screenWidth / 2) - (imageWidth / 2);
+        centerX[1] = (screenHeight / 2);
 
         thread = new MainThread(getHolder(), this);
         setFocusable(true);
@@ -41,8 +49,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        screenWidthToHeightRatio = screenHeight / screenWidth;
-        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.benface2), 500 );
+        screenWidthToHeightRatio = ((float) screenHeight) / screenWidth;
+        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.benface2), imageWidth );
 
         thread.setRunning(true);
         thread.start();
@@ -64,8 +72,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update(){
-        CharacterSprite.x += xVelocity;
-        CharacterSprite.y += yVelocity;
+        if(!MainActivity.isPaused && MainActivity.started) {
+            CharacterSprite.x += xVelocity;
+            CharacterSprite.y += yVelocity;
+        }else{
+
+        }
         if ((CharacterSprite.x > screenWidth - CharacterSprite.scaledImage.getWidth()) || (CharacterSprite.x < 0)) {
             xVelocity = xVelocity * -1;
         }
