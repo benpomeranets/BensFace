@@ -18,14 +18,24 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private CharacterSprite characterSprite;
 
+    public static boolean isPaused = false;
+
+    private int imageWidth = 250;
+
+    public static boolean started = false;
+
     private int xVelocity = 10;
     private int yVelocity = 5;
-    private int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-    private int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
 
-    public static int screenWidthToHeightRatio;
+    public static int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+    public static int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+
+    public static int[] centerX = new int[2];
+
+    public static float screenWidthToHeightRatio;
 
     public GameView(Context context){
+
         super(context);
 
         getHolder().addCallback(this);
@@ -41,8 +51,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        screenWidthToHeightRatio = screenHeight / screenWidth;
-        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.benface2), 500 );
+        screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
+        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.benface2), imageWidth );
 
         thread.setRunning(true);
         thread.start();
@@ -64,8 +74,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public void update(){
-        CharacterSprite.x += xVelocity;
-        CharacterSprite.y += yVelocity;
+
+        if(!isPaused && started) {
+            CharacterSprite.x += xVelocity;
+            CharacterSprite.y += yVelocity;
+        }
         if ((CharacterSprite.x > screenWidth - CharacterSprite.scaledImage.getWidth()) || (CharacterSprite.x < 0)) {
             xVelocity = xVelocity * -1;
         }
