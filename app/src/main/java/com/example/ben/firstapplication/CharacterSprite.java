@@ -6,17 +6,14 @@ import android.graphics.Canvas;
 public class CharacterSprite {
 
     public static Bitmap image;
-    public static Bitmap scaledImage;
+    static Bitmap scaledImage;
 
     public static int x, y;
-    private int imageWidth;
 
-    private float imageHeight;
     private static int intImageHeight;
 
-    public CharacterSprite(Bitmap bmp, int imageWidth) {
-        this.imageWidth = imageWidth;
-        imageHeight = imageWidth * GameView.screenWidthToHeightRatio;
+    CharacterSprite(Bitmap bmp, int imageWidth) {
+        float imageHeight = imageWidth * GameView.screenWidthToHeightRatio;
         intImageHeight = Math.round(imageHeight);
 
         image = bmp;
