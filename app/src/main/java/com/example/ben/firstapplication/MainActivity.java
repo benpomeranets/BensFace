@@ -9,9 +9,13 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.Random;
+
 public class MainActivity extends Activity implements GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener{
 
     GestureDetectorCompat gestureDetectorCompat;
+
+    Random random;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +30,16 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if(event.getAction() == MotionEvent.ACTION_UP){
+        if(event.getAction() == MotionEvent.ACTION_UP && GameView.started){
             GameView.isPaused = false;
+        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging){
+            synchronized (this){
+                GameView.started = true;
+                GameView.slinging = false;
+
+                GameView.xVelocity = 100;
+                GameView.yVelocity = 100;
+            }
         }
 
         gestureDetectorCompat.onTouchEvent(event);
@@ -52,7 +64,11 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     @Override
     public boolean onDown(MotionEvent e) {
-        GameView.isPaused = true;
+        if(GameView.started) {
+            GameView.isPaused = true;
+        }else if(!GameView.started){
+            GameView.slinging = true;
+        }
         return false;
     }
 
@@ -78,9 +94,6 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if(!GameView.started){
-            GameView.started = true;
-        }
         return false;
     }
 }

@@ -14,18 +14,24 @@ import android.widget.LinearLayout;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
+    public static boolean slinging = false;
+
     private MainThread thread;
 
     private CharacterSprite characterSprite;
 
+    private Sling sling;
+
     public static boolean isPaused = false;
 
-    private int imageWidth = 250;
+    double gravity;
+
+    public static int imageWidth = 300;
 
     public static boolean started = false;
 
-    private int xVelocity = 10;
-    private int yVelocity = 5;
+    public static double xVelocity = 100;
+    public static double yVelocity = 100;
 
     public static int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
     public static int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
@@ -41,7 +47,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         getHolder().addCallback(this);
 
         thread = new MainThread(getHolder(), this);
+
         setFocusable(true);
+
+        gravity = 0.97;
     }
 
     @Override
@@ -52,7 +61,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
-        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.benface2), imageWidth );
+        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.bensface3), imageWidth);
+        sling = new Sling(slinging);
+        // Will need to change the third parameter (projectedSling) once you create the image for it.
 
         thread.setRunning(true);
         thread.start();
@@ -78,12 +89,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(!isPaused && started) {
             CharacterSprite.x += xVelocity;
             CharacterSprite.y += yVelocity;
+
+            xVelocity *= gravity;
+            yVelocity *= gravity;
         }
-        if ((CharacterSprite.x > screenWidth - CharacterSprite.scaledImage.getWidth()) || (CharacterSprite.x < 0)) {
-            xVelocity = xVelocity * -1;
+        if ((CharacterSprite.x > screenWidth - CharacterSprite.scaledImage.getWidth())) {
+            synchronized(this) {
+                CharacterSprite.x = screenWidth - CharacterSprite.scaledImage.getWidth() - 1;
+                xVelocity = xVelocity * -1;
+            }
         }
-        if ((CharacterSprite.y > screenHeight - CharacterSprite.scaledImage.getHeight()) || (CharacterSprite.y < 0)) {
-            yVelocity = yVelocity * -1;
+        if((CharacterSprite.x < 0)){
+            synchronized(this) {
+                CharacterSprite.x = 1;
+                xVelocity = xVelocity * -1;
+            }
+        }
+        if ((CharacterSprite.y > screenHeight - CharacterSprite.scaledImage.getHeight())) {
+            synchronized(this) {
+                characterSprite.y = screenHeight - CharacterSprite.scaledImage.getHeight() - 1;
+                yVelocity = yVelocity * -1;
+            }
+        }
+
+        if(CharacterSprite.y < 0){
+            synchronized(this) {
+                CharacterSprite.y = 1;
+                yVelocity = yVelocity * -1;
+            }
+        }
+
+        if(Math.abs(xVelocity) <= 0.5 || Math.abs(yVelocity) <= 0.5 && started && !slinging){
+            started = false;
+            isPaused = false;
         }
     }
 
@@ -92,6 +130,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         super.draw(canvas);
         if(canvas != null){
             characterSprite.draw(canvas);
+            if(slinging) {
+                sling.draw(canvas);
+            }
         }
     }
 
