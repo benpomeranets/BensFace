@@ -26,7 +26,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     double gravity;
 
-    public static int imageWidth = 300;
+    public static int imageWidth = 150;
 
     public static boolean started = false;
 
@@ -61,10 +61,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
-        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.bensface3), imageWidth);
+        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.tennisball), imageWidth);
         sling = new Sling(slinging);
-        // Will need to change the third parameter (projectedSling) once you create the image for it.
-
+        // Will  change the third parameter (projectedSling) once you create the image for it.need to
         thread.setRunning(true);
         thread.start();
     }

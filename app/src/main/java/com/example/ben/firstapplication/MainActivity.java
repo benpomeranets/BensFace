@@ -15,7 +15,7 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     GestureDetectorCompat gestureDetectorCompat;
 
-    Random random;
+    public static float mouseDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,9 +66,12 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     public boolean onDown(MotionEvent e) {
         if(GameView.started) {
             GameView.isPaused = true;
-        }else if(!GameView.started){
+        }else if(!GameView.started && e.getX() >= CharacterSprite.x && e.getX() <= CharacterSprite.x + GameView.imageWidth && e.getY() >= CharacterSprite.y &&
+                e.getY() <= CharacterSprite.y + GameView.imageWidth){
             GameView.slinging = true;
         }
+
+
         return false;
     }
 
@@ -84,6 +87,9 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        if(GameView.slinging){
+            mouseDistance = e2.getX() - (float) CharacterSprite.x + (float) (GameView.imageWidth / 2);
+        }
         return false;
     }
 
