@@ -2,6 +2,7 @@ package com.example.ben.firstapplication;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 
 public class CharacterSprite {
 
