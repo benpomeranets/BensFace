@@ -24,6 +24,8 @@ public class CharacterSprite {
 
         image = bmp;
 
+        //git
+
         if(useFixedRatio) {
             scaledImage = Bitmap.createScaledBitmap(image, imageWidth, intImageHeight, true);
         }else {
