@@ -15,7 +15,7 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     GestureDetectorCompat gestureDetectorCompat;
 
-    public static float mouseDistance;
+    public static double mouseX, mouseY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +32,17 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
         if(event.getAction() == MotionEvent.ACTION_UP && GameView.started){
             GameView.isPaused = false;
-        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging){
+        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength >= Sling.maxLineLength){
             synchronized (this){
                 GameView.started = true;
                 GameView.slinging = false;
 
-                GameView.xVelocity = 100;
-                GameView.yVelocity = 100;
+                GameView.speed = 10;
+
+                GameView.xVelocity = (float) (Math.sin(CharacterSprite.angle));
+                GameView.yVelocity = (float) (Math.cos(CharacterSprite.angle));
+
+                Sling.lineIsGrowing = "false";
             }
         }
 
@@ -88,7 +92,11 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
         if(GameView.slinging){
-            mouseDistance = e2.getX() - (float) CharacterSprite.x + (float) (GameView.imageWidth / 2);
+           Sling.lineIsGrowing = "true";
+
+           mouseX = e2.getX();
+           mouseY = e2.getY();
+           CharacterSprite.angle = ((float) Math.atan2(((float) mouseY) - ((float) (CharacterSprite.y) + (float) (GameView.imageWidth / 2)), ((float) mouseX) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
         }
         return false;
     }

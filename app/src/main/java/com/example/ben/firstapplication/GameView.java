@@ -30,6 +30,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static boolean started = false;
 
+    public static double speed = 10;
+
     public static double xVelocity = 100;
     public static double yVelocity = 100;
 
@@ -85,12 +87,22 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public void update(){
 
+        if(Sling.lineIsGrowing.equals("true")){
+            if(Sling.lineLength < Sling.maxLineLength) {
+                Sling.lineLength += Sling.lineGrowingSpeed;
+            }else{
+                Sling.lineIsGrowing = "done";
+            }
+        }
+
         if(!isPaused && started) {
             CharacterSprite.x += xVelocity;
             CharacterSprite.y += yVelocity;
 
-            xVelocity *= gravity;
-            yVelocity *= gravity;
+            speed *= gravity;
+
+            xVelocity = (float) speed * (float) (Math.sin(CharacterSprite.angle));
+            yVelocity = (float) speed * (float) (Math.cos(CharacterSprite.angle));
         }
         if ((CharacterSprite.x > screenWidth - CharacterSprite.scaledImage.getWidth())) {
             synchronized(this) {

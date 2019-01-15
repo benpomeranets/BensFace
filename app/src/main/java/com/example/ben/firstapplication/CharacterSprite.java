@@ -15,6 +15,8 @@ public class CharacterSprite {
 
     public static int intImageHeight;
 
+    public static float angle;
+
     CharacterSprite(Bitmap bmp, int imageWidth) {
 
         useFixedRatio = false;
