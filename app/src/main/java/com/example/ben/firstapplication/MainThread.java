@@ -7,9 +7,9 @@ public class MainThread extends Thread {
     private SurfaceHolder surfaceHolder;
     private GameView gameView;
     private boolean running;
-    public static Canvas canvas;
+    protected static Canvas canvas;
 
-    public MainThread(SurfaceHolder surfaceHolder, GameView gameView) {
+    MainThread(SurfaceHolder surfaceHolder, GameView gameView) {
 
         super();
         this.surfaceHolder = surfaceHolder;

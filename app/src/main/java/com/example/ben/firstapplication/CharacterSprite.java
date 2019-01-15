@@ -2,29 +2,51 @@ package com.example.ben.firstapplication;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 
 public class CharacterSprite {
 
     public static Bitmap image;
-    public static Bitmap scaledImage;
+    static Bitmap scaledImage;
 
-    public static int x, y;
-    private int imageWidth;
-    public static float imageHeight;
+    public static double x, y;
+
+    public static boolean useFixedRatio;
+
     public static int intImageHeight;
 
-    public CharacterSprite(Bitmap bmp, int imageWidth) {
-        this.imageWidth = imageWidth;
-        imageHeight = imageWidth * GameView.screenWidthToHeightRatio;
-        intImageHeight = (int) Math.ceil(imageHeight);
-        GameView.centerX[1] = Math.round((GameView.screenHeight / 2) - (intImageHeight / 2));
+    public static float angle;
+
+    CharacterSprite(Bitmap bmp, int imageWidth) {
+
+        useFixedRatio = false;
+
+        float imageHeight = imageWidth * GameView.screenWidthToHeightRatio;
+        intImageHeight = Math.round(imageHeight);
+
         image = bmp;
-        scaledImage = Bitmap.createScaledBitmap(image, imageWidth, intImageHeight, true);
+
+        //git
+
+        if(useFixedRatio) {
+            scaledImage = Bitmap.createScaledBitmap(image, imageWidth, intImageHeight, true);
+        }else {
+            scaledImage = Bitmap.createScaledBitmap(image, imageWidth, imageWidth, true);
+        }
+
+        GameView.centerX[0] = Math.round((GameView.screenWidth / 2) - (imageWidth / 2));
+
+        if(useFixedRatio) {
+            GameView.centerX[1] = Math.round((GameView.screenHeight / 2) - (intImageHeight / 2));
+        }else{
+            GameView.centerX[1] = Math.round((GameView.screenHeight) - (imageWidth * 2));
+        }
+
         x = GameView.centerX[0];
         y = GameView.centerX[1];
     }
 
     public void draw(Canvas canvas){
-        canvas.drawBitmap(scaledImage, x, y, null);
+        canvas.drawBitmap(scaledImage, Math.round(x), Math.round(y), null);
     }
 }

@@ -9,20 +9,13 @@ import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
-public class MainActivity extends Activity implements GestureDetector.OnGestureListener, GestureDetector.OnDoubleTapListener {
+import java.util.Random;
 
-    private int lastXVel = 0;
-    private int lastYVel = 0;
+public class MainActivity extends Activity implements GestureDetector.OnDoubleTapListener, GestureDetector.OnGestureListener{
 
-    public static boolean isPaused = false;
-    public static boolean started = false;
+    GestureDetectorCompat gestureDetectorCompat;
 
-    private int[] beg = new int[2];
-    private int[] end = new int[2];
-
-    public static boolean isFlinging = false;
-
-    private GestureDetectorCompat gestureDetectorCompat;
+    public static double mouseX, mouseY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,20 +23,33 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new GameView(this));
-        gestureDetectorCompat = new GestureDetectorCompat(this, this);
-        gestureDetectorCompat.setOnDoubleTapListener(this);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        gestureDetectorCompat = new GestureDetectorCompat(this, this);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        gestureDetectorCompat.onTouchEvent(event);
-        if(event.getAction() == MotionEvent.ACTION_UP){
-            isPaused = false;
+
+        if(event.getAction() == MotionEvent.ACTION_UP && GameView.started){
+            GameView.isPaused = false;
+        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength >= Sling.maxLineLength){
+            synchronized (this){
+                GameView.started = true;
+                GameView.slinging = false;
+
+                GameView.speed = 10;
+
+                GameView.xVelocity = (float) (Math.sin(CharacterSprite.angle));
+                GameView.yVelocity = (float) (Math.cos(CharacterSprite.angle));
+
+                Sling.lineIsGrowing = "false";
+            }
         }
+
+        gestureDetectorCompat.onTouchEvent(event);
+
         return super.onTouchEvent(event);
     }
-
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
@@ -62,9 +68,14 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 
     @Override
     public boolean onDown(MotionEvent e) {
-        lastXVel = GameView.xVelocity;
-        lastYVel = GameView.yVelocity;
-        isPaused = true;
+        if(GameView.started) {
+            GameView.isPaused = true;
+        }else if(!GameView.started && e.getX() >= CharacterSprite.x && e.getX() <= CharacterSprite.x + GameView.imageWidth && e.getY() >= CharacterSprite.y &&
+                e.getY() <= CharacterSprite.y + GameView.imageWidth){
+            GameView.slinging = true;
+        }
+
+
         return false;
     }
 
@@ -80,6 +91,13 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        if(GameView.slinging){
+           Sling.lineIsGrowing = "true";
+
+           mouseX = e2.getX();
+           mouseY = e2.getY();
+           CharacterSprite.angle = ((float) Math.atan2(((float) mouseY) - ((float) (CharacterSprite.y) + (float) (GameView.imageWidth / 2)), ((float) mouseX) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
+        }
         return false;
     }
 
@@ -90,10 +108,6 @@ public class MainActivity extends Activity implements GestureDetector.OnGestureL
 
     @Override
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-        if(!started){
-            started = true;
-        }
         return false;
     }
-
 }
