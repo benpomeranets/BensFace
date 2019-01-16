@@ -64,6 +64,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        for(int i = 0; i < Brick.maxBricks; i ++){
+            Brick.bricks.add(new float[5]);
+            Brick.bricks.get(i)[4] = 1;
+        }
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
         characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.tennisball), imageWidth);
         sling = new Sling(slinging);
@@ -86,6 +90,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
             retry = false;
         }
+        System.exit(0);
     }
 
     public void update(){
