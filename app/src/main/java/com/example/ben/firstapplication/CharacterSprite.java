@@ -37,9 +37,9 @@ public class CharacterSprite {
         GameView.centerX[0] = Math.round((GameView.screenWidth / 2) - (imageWidth / 2));
 
         if(useFixedRatio) {
-            GameView.centerX[1] = Math.round((GameView.screenHeight / 2) - (intImageHeight / 2));
+            GameView.centerX[1] = Math.round((GameView.screenWidth / 2) - (intImageHeight / 2));
         }else{
-            GameView.centerX[1] = Math.round((GameView.screenHeight) - (imageWidth * 2));
+            GameView.centerX[1] = Math.round((GameView.screenHeight) - (imageWidth) - (GameView.screenHeight / 20));
         }
 
         x = GameView.centerX[0];

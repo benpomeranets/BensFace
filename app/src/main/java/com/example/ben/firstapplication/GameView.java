@@ -24,13 +24,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static boolean isPaused = false;
 
-    double gravity;
+    //double gravity;
 
-    public static int imageWidth = 150;
+    public static int imageWidth = 120;
 
     public static boolean started = false;
 
-    public static double speed = 10;
+    public static double speed = 30;
 
     public static double xVelocity = 100;
     public static double yVelocity = 100;
@@ -52,7 +52,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         setFocusable(true);
 
-        gravity = 0.97;
+        //gravity = 0.97;
     }
 
     @Override
@@ -96,44 +96,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         if(!isPaused && started) {
+
             CharacterSprite.x += xVelocity;
             CharacterSprite.y += yVelocity;
 
-            speed *= gravity;
-
-            xVelocity = (float) speed * (float) (Math.sin(CharacterSprite.angle));
-            yVelocity = (float) speed * (float) (Math.cos(CharacterSprite.angle));
         }
-        if ((CharacterSprite.x > screenWidth - CharacterSprite.scaledImage.getWidth())) {
-            synchronized(this) {
+        if ((CharacterSprite.x >= screenWidth - CharacterSprite.scaledImage.getWidth())) {
+           // synchronized(this) {
                 CharacterSprite.x = screenWidth - CharacterSprite.scaledImage.getWidth() - 1;
                 xVelocity = xVelocity * -1;
-            }
+           // }
         }
-        if((CharacterSprite.x < 0)){
-            synchronized(this) {
+        if((CharacterSprite.x <= 0)){
+           // synchronized(this) {
                 CharacterSprite.x = 1;
                 xVelocity = xVelocity * -1;
-            }
+           // }
         }
-        if ((CharacterSprite.y > screenHeight - CharacterSprite.scaledImage.getHeight())) {
-            synchronized(this) {
+        if ((CharacterSprite.y >= screenHeight - CharacterSprite.scaledImage.getHeight())) {
+            //synchronized(this) {
                 characterSprite.y = screenHeight - CharacterSprite.scaledImage.getHeight() - 1;
                 yVelocity = yVelocity * -1;
-            }
+            //}
         }
 
-        if(CharacterSprite.y < 0){
-            synchronized(this) {
-                CharacterSprite.y = 1;
-                yVelocity = yVelocity * -1;
-            }
+        if(CharacterSprite.y <= 0){
+            CharacterSprite.y = 1;
+            yVelocity = yVelocity * -1;
         }
 
-        if(Math.abs(xVelocity) <= 0.5 || Math.abs(yVelocity) <= 0.5 && started && !slinging){
+        /*if(Math.abs(xVelocity) <= 0.5 || Math.abs(yVelocity) <= 0.5 && started && !slinging){
             started = false;
             isPaused = false;
-        }
+        }*/
     }
 
     @Override

@@ -15,6 +15,10 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     GestureDetectorCompat gestureDetectorCompat;
 
+    public static float xVelSin;
+
+    public static float yVelCos;
+
     public static double mouseX, mouseY;
 
     @Override
@@ -37,13 +41,21 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
                 GameView.started = true;
                 GameView.slinging = false;
 
-                GameView.speed = 10;
+                xVelSin = (float) Math.cos((double) CharacterSprite.angle);
+                yVelCos = (float) Math.sin((double) CharacterSprite.angle);
 
-                GameView.xVelocity = (float) (Math.sin(CharacterSprite.angle));
-                GameView.yVelocity = (float) (Math.cos(CharacterSprite.angle));
+                GameView.xVelocity = (float) GameView.speed * xVelSin;
+                GameView.yVelocity = (float) GameView.speed * yVelCos;
 
                 Sling.lineIsGrowing = "false";
             }
+        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength < Sling.maxLineLength){
+            GameView.started = false;
+            GameView.slinging = false;
+
+            Sling.lineIsGrowing = "false";
+            Sling.lineLength = 0;
+
         }
 
         gestureDetectorCompat.onTouchEvent(event);
