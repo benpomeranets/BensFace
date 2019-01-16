@@ -26,9 +26,8 @@ public class Sling{
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.RED);
-        paint.setStrokeWidth(15);
+        paint.setStrokeWidth(10);
         paint.setStrokeCap(Paint.Cap.ROUND);
-        System.out.println(CharacterSprite.angle + " " + (float) GameView.speed * (float) (Math.sin(CharacterSprite.angle)) + " " + (float) GameView.speed * (float) (Math.cos(CharacterSprite.angle)));
 
         if(lineIsGrowing.equals("done")){
             lineLength = maxLineLength;

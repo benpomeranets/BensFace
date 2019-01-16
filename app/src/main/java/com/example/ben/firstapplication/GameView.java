@@ -28,7 +28,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     //double gravity;
 
-    public static int imageWidth = 120;
+    public static int imageWidth = 95;
 
     public static boolean started = false;
 
@@ -137,13 +137,14 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas){
         super.draw(canvas);
+        canvas.drawColor(Color.rgb(42, 145, 21));
+        brick.draw(canvas);
         if(canvas != null){
             characterSprite.draw(canvas);
             if(slinging) {
                 sling.draw(canvas);
             }
         }
-        brick.draw(canvas);
     }
 
 }
