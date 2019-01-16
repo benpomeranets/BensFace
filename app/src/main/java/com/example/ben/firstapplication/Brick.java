@@ -13,7 +13,7 @@ public class Brick {
     }
 
     public void draw(Canvas canvas) {
-
+        Paint paint = new Paint();
     }
 
 }
