@@ -32,7 +32,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static boolean started = false;
 
-    public static double speed = 30;
+    public static double speed = 25;
 
     public static double xVelocity = 100;
     public static double yVelocity = 100;
@@ -65,7 +65,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         for(int i = 0; i < Brick.maxBricks; i ++){
-            Brick.bricks.add(new float[5]);
+            Brick.bricks.add(new float[6]);
             Brick.bricks.get(i)[4] = 1;
         }
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
@@ -103,7 +103,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
 
-        if(!isPaused && started) {
+        if(!isPaused && started && Brick.canContinue) {
 
             CharacterSprite.x += xVelocity;
             CharacterSprite.y += yVelocity;
