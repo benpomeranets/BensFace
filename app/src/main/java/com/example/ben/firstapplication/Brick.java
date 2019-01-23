@@ -18,6 +18,8 @@ public class Brick {
 
     public static boolean canContinue = true;
 
+    boolean isProcessing = false;
+
     public Brick(){
 
     }
@@ -43,39 +45,62 @@ public class Brick {
 
             if((CharacterSprite.x <= bricks.get(i)[2] && CharacterSprite.x + GameView.imageWidth >= bricks.get(i)[0])
             && CharacterSprite.y <= bricks.get(i)[3] && CharacterSprite.y + GameView.imageWidth >= bricks.get(i)[1] && bricks.get(i)[4] != 0 && canContinue){
-                lastBrickHitChangedDirections = 0;
-
-                if(CharacterSprite.x > bricks.get(i)[0]  && CharacterSprite.x < bricks.get(i)[2] && lastBrickHitChangedDirections == 0 && GameView.yVelocity < 0){
-                    canContinue = false;
-                    GameView.yVelocity *= -1;
-                    lastBrickHitChangedDirections = 1;
-                    if(lastBrickHitChangedDirections == 1) {
-                        canContinue = true;
-                    }
-                }else if(CharacterSprite.x > bricks.get(i)[0]  && CharacterSprite.x < bricks.get(i)[2] && lastBrickHitChangedDirections == 0 && GameView.yVelocity > 0) {
-                    canContinue = false;
-                    GameView.yVelocity *= -1;
-                    lastBrickHitChangedDirections = 1;
-                    if (lastBrickHitChangedDirections == 1) {
-                        canContinue = true;
-                    }
-                }else if(lastBrickHitChangedDirections == 0 && GameView.xVelocity > 0) {
-                           canContinue = false;
-                           GameView.xVelocity *= -1;
-                           lastBrickHitChangedDirections = 1;
-                           if (lastBrickHitChangedDirections == 1) {
-                               canContinue = true;
-                           }
-                }else if(lastBrickHitChangedDirections == 0 && GameView.xVelocity < 0) {
-                       canContinue = false;
-                       GameView.xVelocity *= -1;
-                       lastBrickHitChangedDirections = 1;
-                       if (lastBrickHitChangedDirections == 1) {
-                           canContinue = true;
-                       }
+                //lastBrickHitChangedDirections = 0;
+                if(CharacterSprite.x >= bricks.get(i)[0]  && CharacterSprite.x <= bricks.get(i)[2] && GameView.yVelocity < 0 && canContinue){
+                    do {
+                        canContinue = false;
+                        synchronized (this) {
+                            GameView.yVelocity *= -1;
+                            lastBrickHitChangedDirections = 1;
+                            canContinue = true;
+                            isProcessing = true;
+                            bricks.get(i)[4] = 0;
+                            lastBrickHitChangedDirections = 0;
+                        }
+                    }while(CharacterSprite.x >= bricks.get(i)[0]  && CharacterSprite.x <= bricks.get(i)[2] && GameView.yVelocity < 0 && canContinue);
+                }else if(CharacterSprite.x >= bricks.get(i)[0]  && CharacterSprite.x <= bricks.get(i)[2] && GameView.yVelocity > 0 && canContinue) {
+                    do {
+                        canContinue = false;
+                        synchronized (this) {
+                            GameView.yVelocity *= -1;
+                            lastBrickHitChangedDirections = 1;
+                            canContinue = true;
+                            isProcessing = true;
+                            bricks.get(i)[4] = 0;
+                            lastBrickHitChangedDirections = 0;
+                        }
+                    }while(CharacterSprite.x >= bricks.get(i)[0]  && CharacterSprite.x <= bricks.get(i)[2] && GameView.yVelocity > 0 && canContinue);
+                }if(CharacterSprite.x <= bricks.get(i)[2] && (CharacterSprite.y + (GameView.imageWidth / 2)) <= bricks.get(i)[3]
+                        && (CharacterSprite.y + (GameView.imageWidth / 2)) >= bricks.get(i)[1] && GameView.xVelocity < 0){
+                    do {
+                        canContinue = false;
+                        synchronized (this) {
+                            GameView.xVelocity *= -1;
+                            lastBrickHitChangedDirections = 1;
+                            canContinue = true;
+                            isProcessing = true;
+                            bricks.get(i)[4] = 0;
+                            lastBrickHitChangedDirections = 0;
+                        }
+                    }while(CharacterSprite.x <= bricks.get(i)[2] && (CharacterSprite.y + (GameView.imageWidth / 2)) <= bricks.get(i)[3]
+                            && (CharacterSprite.y + (GameView.imageWidth / 2)) >= bricks.get(i)[1] && GameView.xVelocity < 0);
+                }else if(CharacterSprite.x + GameView.imageWidth >= bricks.get(i)[0] && (CharacterSprite.y + (GameView.imageWidth / 2)) <= bricks.get(i)[3]
+                        && (CharacterSprite.y + (GameView.imageWidth / 2)) >= bricks.get(i)[1] && GameView.xVelocity > 0){
+                    do {
+                        canContinue = false;
+                        synchronized (this) {
+                            GameView.xVelocity *= -1;
+                            lastBrickHitChangedDirections = 1;
+                            canContinue = true;
+                            isProcessing = true;
+                            bricks.get(i)[4] = 0;
+                            lastBrickHitChangedDirections = 0;
+                        }
+                    }while(CharacterSprite.x + GameView.imageWidth >= bricks.get(i)[0] && (CharacterSprite.y + (GameView.imageWidth / 2)) <= bricks.get(i)[3]
+                            && (CharacterSprite.y + (GameView.imageWidth / 2)) >= bricks.get(i)[1] && GameView.xVelocity > 0);
                 }
-
-                bricks.get(i)[4] = 0;
+            }else{
+                lastBrickHitChangedDirections = 0;
             }
         }
     }
