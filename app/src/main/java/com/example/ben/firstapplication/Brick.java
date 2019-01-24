@@ -114,6 +114,21 @@ public class Brick {
             }else{
                 lastBrickHitChangedDirections = 0;
             }*/
+            if(CharacterSprite.playerRect != null){
+                if(brickRect.contains(CharacterSprite.playerRect.centerX(), CharacterSprite.playerRect.top) && bricks.get(i)[4] != 0){
+                    bricks.get(i)[4] = 0;
+                    GameView.yVelocity *= -1;
+                }else if(brickRect.contains(CharacterSprite.playerRect.centerX(), CharacterSprite.playerRect.bottom) && bricks.get(i)[4] != 0){
+                    bricks.get(i)[4] = 0;
+                    GameView.yVelocity *= -1;
+                }else if(brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.centerY()) && bricks.get(i)[4] != 0){
+                    bricks.get(i)[4] = 0;
+                    GameView.xVelocity *= -1;
+                }else if(brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.centerY()) && bricks.get(i)[4] != 0){
+                    bricks.get(i)[4] = 0;
+                    GameView.xVelocity *= -1;
+                }
+            }
         }
     }
 

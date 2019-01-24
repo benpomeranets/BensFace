@@ -50,12 +50,13 @@ public class CharacterSprite {
         x = GameView.centerX[0];
         y = GameView.centerX[1];
 
-        playerRect = new RectF((float) x, (float) y, (float) x + (GameView.imageWidth), (float) y + (float) (GameView.imageWidth));
     }
 
     public void draw(Canvas canvas){
+        playerRect = new RectF((float) x, (float) y, (float) x + (GameView.imageWidth), (float) y + (float) (GameView.imageWidth));
+
         Paint paint = new Paint();
-        paint.setColor(Color.rgb(226, 132, 24));
+        paint.setColor(Color.rgb(255, 255, 255));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(playerRect, paint);
     }
