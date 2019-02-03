@@ -21,6 +21,8 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     public static double mouseX, mouseY;
 
+    public static boolean isDraggingPlatform = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +37,8 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     public boolean onTouchEvent(MotionEvent event) {
 
         if(event.getAction() == MotionEvent.ACTION_UP && GameView.started){
-
             GameView.isPaused = false;
+            isDraggingPlatform = false;
         }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength >= Sling.maxLineLength){
             synchronized (this){
 
@@ -88,7 +90,6 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
             GameView.slinging = true;
         }
 
-
         return false;
     }
 
@@ -104,13 +105,18 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     @Override
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        mouseX = e2.getX();
+        mouseY = e2.getY();
         if(GameView.slinging){
            Sling.lineIsGrowing = "true";
 
-           mouseX = e2.getX();
-           mouseY = e2.getY();
            CharacterSprite.angle = ((float) Math.atan2(((float) mouseY) - ((float) (CharacterSprite.y) + (float) (GameView.imageWidth / 2)), ((float) mouseX) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
         }
+
+        if(GameView.started) {
+            isDraggingPlatform = true;
+        }
+
         return false;
     }
 

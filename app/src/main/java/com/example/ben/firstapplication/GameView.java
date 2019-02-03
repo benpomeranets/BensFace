@@ -20,6 +20,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private CharacterSprite characterSprite;
 
+    private Platform platform;
+
     private Sling sling;
 
     private Brick brick;
@@ -72,6 +74,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.tennisball), imageWidth);
         sling = new Sling(slinging);
         brick = new Brick();
+        platform = new Platform();
         // Will  change the third parameter (projectedSling) once you create the image for it.need to
         thread.setRunning(true);
         thread.start();
@@ -121,11 +124,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                 xVelocity = xVelocity * -1;
            // }
         }
-        if ((CharacterSprite.y >= screenHeight - CharacterSprite.scaledImage.getHeight())) {
-            //synchronized(this) {
-                characterSprite.y = screenHeight - CharacterSprite.scaledImage.getHeight() - 1;
-                yVelocity = yVelocity * -1;
-            //}
+
+        if(platform != null && platform.platformRect != null && started) {
+            if (platform.platformRect.contains((float) CharacterSprite.x, CharacterSprite.playerRect.bottom) ||
+                    platform.platformRect.contains((float) CharacterSprite.x + GameView.imageWidth, CharacterSprite.playerRect.bottom)) {
+                synchronized(this) {
+                    CharacterSprite.y = platform.platformRect.top - (GameView.imageWidth + 1);
+                    yVelocity = yVelocity * -1;
+                }
+            }
         }
 
         if(CharacterSprite.y <= 0){
@@ -149,6 +156,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             if(slinging) {
                 sling.draw(canvas);
             }
+        }
+        if(started){
+            platform.draw(canvas);
         }
     }
 
