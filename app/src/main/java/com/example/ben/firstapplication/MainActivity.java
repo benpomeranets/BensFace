@@ -84,8 +84,7 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     public boolean onDown(MotionEvent e) {
         /*if(GameView.started) {
            // GameView.isPaused = true;
-        }else*/ if(!GameView.started && e.getX() >= CharacterSprite.x && e.getX() <= CharacterSprite.x + GameView.imageWidth && e.getY() >= CharacterSprite.y &&
-                e.getY() <= CharacterSprite.y + GameView.imageWidth){
+        }else*/ if(!GameView.started){
             GameView.slinging = true;
         }
 

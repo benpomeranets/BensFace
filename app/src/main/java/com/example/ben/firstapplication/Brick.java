@@ -13,7 +13,7 @@ public class Brick {
 
     public static List<float[]> bricks = new ArrayList<float[]>();
 
-    public static int maxBricks = 30;
+    public static int maxBricks = 120;
 
     static float lastBrickHitChangedDirections = 0;
 
@@ -35,9 +35,9 @@ public class Brick {
 
         for(int i = 0; i < bricks.size(); i ++){
             bricks.get(i)[0] = 4 + (float) (i % 6)*(float)(Math.ceil(GameView.screenWidth / 6));
-            bricks.get(i)[1] = 4 + (float) (Math.ceil(i/6) * (float)(Math.ceil(GameView.screenHeight / 10)));
+            bricks.get(i)[1] = 4 + (float) (Math.ceil(i/6) * (float)(Math.ceil(GameView.screenHeight / 35)));
             bricks.get(i)[2] = 4 + (float) (i % 6)*(float)(Math.ceil(GameView.screenWidth / 6)) + (float)(Math.ceil(GameView.screenWidth / 6)) - 10;
-            bricks.get(i)[3] = 4 + (float) (Math.ceil(i/6) * (float)(Math.ceil(GameView.screenHeight / 10))) + ((float)(Math.ceil((GameView.screenHeight / 10)) - 10));
+            bricks.get(i)[3] = 4 + (float) (Math.ceil(i/6) * (float)(Math.ceil(GameView.screenHeight / 35))) + ((float)(Math.ceil((GameView.screenHeight / 35)) - 10));
             bricks.get(i)[5] = 0;
 
             brickRect = new RectF(bricks.get(i)[0], bricks.get(i)[1], bricks.get(i)[2], bricks.get(i)[3]);
