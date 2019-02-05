@@ -34,7 +34,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static boolean started = false;
 
-    public static double speed = 17;
+    public static double speed = 15;
 
     public static double xVelocity = 100;
     public static double yVelocity = 100;
