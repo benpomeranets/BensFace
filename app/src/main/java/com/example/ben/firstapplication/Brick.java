@@ -13,7 +13,9 @@ public class Brick {
 
     public static List<float[]> bricks = new ArrayList<float[]>();
 
-    public static int maxBricks = 72;
+    public static String sideContained = "none";
+
+    public static int maxBricks = 60;
 
     static float lastBrickHitChangedDirections = 0;
 
@@ -33,11 +35,11 @@ public class Brick {
         paint.setColor(Color.rgb(226, 132, 24));
         paint.setStyle(Paint.Style.FILL);
 
-        for(int i = 0; i < bricks.size(); i ++){
-            bricks.get(i)[0] = 4 + (float) (i % 6)*(float)(Math.ceil(GameView.screenWidth / 6));
-            bricks.get(i)[1] = 4 + (float) (Math.ceil(i/6) * (float)(Math.ceil(GameView.screenHeight / 20)));
-            bricks.get(i)[2] = 4 + (float) (i % 6)*(float)(Math.ceil(GameView.screenWidth / 6)) + (float)(Math.ceil(GameView.screenWidth / 6)) - 10;
-            bricks.get(i)[3] = 4 + (float) (Math.ceil(i/6) * (float)(Math.ceil(GameView.screenHeight / 20))) + ((float)(Math.ceil((GameView.screenHeight / 20)) - 10));
+        for (int i = 0; i < bricks.size(); i++) {
+            bricks.get(i)[0] = 4 + (float) (i % 6) * (float) (Math.ceil(GameView.screenWidth / 6));
+            bricks.get(i)[1] = 4 + (float) (Math.ceil(i / 6) * (float) (Math.ceil(GameView.screenHeight / 15)));
+            bricks.get(i)[2] = 4 + (float) (i % 6) * (float) (Math.ceil(GameView.screenWidth / 6)) + (float) (Math.ceil(GameView.screenWidth / 6)) - 10;
+            bricks.get(i)[3] = 4 + (float) (Math.ceil(i / 6) * (float) (Math.ceil(GameView.screenHeight / 15))) + ((float) (Math.ceil((GameView.screenHeight / 15)) - 10));
             bricks.get(i)[5] = 0;
 
             brickRect = new RectF(bricks.get(i)[0], bricks.get(i)[1], bricks.get(i)[2], bricks.get(i)[3]);
@@ -45,7 +47,7 @@ public class Brick {
             float brickHeight = bricks.get(i)[3] - bricks.get(i)[1];
             float brickWidth = bricks.get(i)[2] - bricks.get(i)[0];
 
-            if(bricks.get(i)[4] != 0) {
+            if (bricks.get(i)[4] != 0) {
                 //canvas.drawRect(bricks.get(i)[0], bricks.get(i)[1], bricks.get(i)[2], bricks.get(i)[3], paint);
                 canvas.drawRect(brickRect, paint);
             }
@@ -114,21 +116,52 @@ public class Brick {
             }else{
                 lastBrickHitChangedDirections = 0;
             }*/
-            if(CharacterSprite.playerRect != null && GameView.started){
-                if((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.top)) && bricks.get(i)[4] != 0 && GameView.yVelocity < 0){
-                    bricks.get(i)[4] = 0;
-                    GameView.yVelocity *= -1;
-                }if((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.bottom) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0 && GameView.yVelocity > 0){
-                        bricks.get(i)[4] = 0;
-                        GameView.yVelocity *= -1;
-                }if((brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0 && GameView.xVelocity > 0){
-                    bricks.get(i)[4] = 0;
-                    GameView.xVelocity *= -1;
-                }if((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0 && GameView.xVelocity < 0)
-                    bricks.get(i)[4] = 0;
-                    GameView.xVelocity *= -1;
+            if (CharacterSprite.playerRect != null && GameView.started && CharacterSprite.heightAwayFromStart >= 50) {
+                if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.top)) && bricks.get(i)[4] != 0
+                        && GameView.yVelocity < 0 && !sideContained.equals("bottom") && !sideContained.equals("right") && !sideContained.equals("left")) {
+
+                    if ((float) bricks.get(i)[3] - (float) CharacterSprite.y <= 20.0) {
+                        sideContained = "top";
+                    }
+                }
+                if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.bottom) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0
+                        && GameView.yVelocity > 0 && !sideContained.equals("top") && !sideContained.equals("right") && !sideContained.equals("left")) {
+
+                    if ((float) bricks.get(i)[1] - (float) CharacterSprite.y + (float) GameView.imageWidth <= 20.0) {
+                        sideContained = "bottom";
+                    }
+                }
+                if ((brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0
+                        && GameView.xVelocity > 0 && !sideContained.equals("bottom") && !sideContained.equals("top") && !sideContained.equals("left")) {
+                    sideContained = "right";
+                }
+                if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0
+                        && GameView.xVelocity < 0 && !sideContained.equals("bottom") && !sideContained.equals("right") && !sideContained.equals("top")) {
+
+                    sideContained = "left";
                 }
             }
+
+            if(sideContained.equals("top")){
+                bricks.get(i)[4] = 0;
+                GameView.yVelocity *= -1;
+                sideContained = "none";
+            }if(sideContained.equals("bottom")){
+                bricks.get(i)[4] = 0;
+                GameView.yVelocity *= -1;
+                sideContained = "none";
+            }if(sideContained.equals("right")){
+                bricks.get(i)[4] = 0;
+                GameView.xVelocity *= -1;
+                sideContained = "none";
+            }if(sideContained.equals("left")){
+                bricks.get(i)[4] = 0;
+                GameView.xVelocity *= -1;
+                sideContained = "none";
+            }
+
         }
+
+    }
 
 }

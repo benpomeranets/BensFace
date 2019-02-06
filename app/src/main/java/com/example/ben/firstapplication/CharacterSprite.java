@@ -12,6 +12,8 @@ public class CharacterSprite {
     public static Bitmap image;
     static Bitmap scaledImage;
 
+    public static float heightAwayFromStart;
+
     public static double x, y;
 
     public static boolean useFixedRatio;
@@ -59,5 +61,6 @@ public class CharacterSprite {
         paint.setColor(Color.rgb(255, 255, 255));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(playerRect, paint);
+        heightAwayFromStart = (float) GameView.centerX[1] - (float) x;
     }
 }
