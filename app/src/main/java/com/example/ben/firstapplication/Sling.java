@@ -25,7 +25,7 @@ public class Sling{
     public void draw(Canvas canvas){
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.RED);
+        paint.setColor(Color.rgb(234, 105, 105));
         paint.setStrokeWidth(10);
         paint.setStrokeCap(Paint.Cap.ROUND);
 

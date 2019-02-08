@@ -23,7 +23,7 @@ public class Platform {
             platformX = (float) MainActivity.mouseX;
         }
         Paint paint = new Paint();
-        paint.setColor(Color.rgb(226, 132, 24));
+        paint.setColor(Color.rgb(234, 105, 105));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(platformRect, paint);
     }

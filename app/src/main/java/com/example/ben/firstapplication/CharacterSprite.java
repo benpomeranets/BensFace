@@ -58,7 +58,7 @@ public class CharacterSprite {
         playerRect = new RectF((float) x, (float) y, (float) x + (GameView.imageWidth), (float) y + (float) (GameView.imageWidth));
 
         Paint paint = new Paint();
-        paint.setColor(Color.rgb(255, 255, 255));
+        paint.setColor(Color.rgb(234, 239, 249));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawRect(playerRect, paint);
         heightAwayFromStart = (float) GameView.centerX[1] - (float) x;

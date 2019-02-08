@@ -32,7 +32,7 @@ public class Brick {
     public void draw(Canvas canvas) {
 
         Paint paint = new Paint();
-        paint.setColor(Color.rgb(226, 132, 24));
+        paint.setColor(Color.rgb(104, 130, 135));
         paint.setStyle(Paint.Style.FILL);
 
         for (int i = 0; i < bricks.size(); i++) {
@@ -120,14 +120,14 @@ public class Brick {
                 if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.top)) && bricks.get(i)[4] != 0
                         && GameView.yVelocity < 0 && !sideContained.equals("bottom") && !sideContained.equals("right") && !sideContained.equals("left")) {
 
-                    if ((float) bricks.get(i)[3] - (float) CharacterSprite.y <= 20.0) {
+                    if ((float) bricks.get(i)[3] - (float) CharacterSprite.y <= 30.0) {
                         sideContained = "top";
                     }
                 }
                 if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.bottom) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0
                         && GameView.yVelocity > 0 && !sideContained.equals("top") && !sideContained.equals("right") && !sideContained.equals("left")) {
 
-                    if ((float) bricks.get(i)[1] - (float) CharacterSprite.y + (float) GameView.imageWidth <= 20.0) {
+                    if ((float) bricks.get(i)[1] - (float) CharacterSprite.y + (float) GameView.imageWidth <= 30.0) {
                         sideContained = "bottom";
                     }
                 }

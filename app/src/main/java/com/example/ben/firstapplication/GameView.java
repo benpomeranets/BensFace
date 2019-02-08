@@ -125,7 +125,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
            // }
         }
 
-        if(platform != null && platform.platformRect != null && started) {
+        if(platform != null && platform.platformRect != null && started && yVelocity > 0) {
             if (platform.platformRect.contains((float) CharacterSprite.x, CharacterSprite.playerRect.bottom) ||
                     platform.platformRect.contains((float) CharacterSprite.x + GameView.imageWidth, CharacterSprite.playerRect.bottom)) {
                 synchronized(this) {
@@ -149,7 +149,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas){
         super.draw(canvas);
-        canvas.drawColor(Color.rgb(42, 145, 21));
+        canvas.drawColor(Color.rgb(45, 167, 188));
         brick.draw(canvas);
         if(canvas != null){
             characterSprite.draw(canvas);
