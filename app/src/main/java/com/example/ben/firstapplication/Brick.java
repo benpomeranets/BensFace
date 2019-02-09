@@ -139,7 +139,7 @@ public class Brick {
                 }
             }else{
                 lastBrickHitChangedDirections = 0;
-            }*/
+            }
 
             if (CharacterSprite.playerRect != null && GameView.started && CharacterSprite.heightAwayFromStart >= 50) {
 
@@ -184,6 +184,21 @@ public class Brick {
                 bricks.get(i)[4] = 0;
                 GameView.xVelocity *= -1;
                 sideContained = "none";
+            }*/
+
+            if(CharacterSprite.playerRect != null) {
+                if (CharacterSprite.playerRect.intersect(brickRect) && bricks.get(i)[4] != 0) {
+                    if((((float) CharacterSprite.y <= (float) brickRect.bottom && (float) brickRect.bottom - (float) CharacterSprite.y <= (float) (GameView.speed * 2)) && GameView.yVelocity < 0) ||
+                        ((float) CharacterSprite.y + (float) GameView.imageWidth >= (float) brickRect.top && (((float) CharacterSprite.y + (float) GameView.imageWidth)) - (float) brickRect.top <= (float) (GameView.speed * 2)) && GameView.yVelocity > 0){
+
+                        bricks.get(i)[4] = 0;
+                        GameView.yVelocity *= -1;
+
+                    }else if(((float) CharacterSprite.x + (float) GameView.imageWidth >= (float) brickRect.left && GameView.xVelocity > 0) || ((float) CharacterSprite.x <= (float) brickRect.right && GameView.xVelocity < 0)){
+                        bricks.get(i)[4] = 0;
+                        GameView.xVelocity *= -1;
+                    }
+                }
             }
 
         }

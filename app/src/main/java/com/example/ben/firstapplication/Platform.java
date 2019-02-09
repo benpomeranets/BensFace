@@ -22,18 +22,18 @@ public class Platform {
     public void draw(Canvas canvas){
 
         if(GameView.centerX != null){
-            platformHeightOffGround = (GameView.screenHeight) - (GameView.centerX[1]) - (GameView.imageWidth + 15);
+            platformHeightOffGround = (GameView.screenHeight) - (GameView.centerX[1]) - (GameView.imageWidth + 20);
         }
 
         platformRect = new RectF(platformX - (platformWidth / 2), GameView.screenHeight - (platformHeight + platformHeightOffGround), platformX + (platformWidth / 2),
                 GameView.screenHeight - platformHeightOffGround);
 
-        if(CharacterSprite.y + GameView.imageWidth < GameView.screenHeight - (platformHeight + platformHeightOffGround) - 5){
+        if(CharacterSprite.y + GameView.imageWidth < GameView.screenHeight - (platformHeight + platformHeightOffGround) - 5 && !canStartDragging && MainActivity.isDraggingPlatform){
             canStartDragging = true;
         }
 
         if(GameView.started && canStartDragging) {
-            platformVel = ((float) MainActivity.mouseX - platformX) / 10;
+            platformVel = ((float) MainActivity.mouseX - platformX) / 6;
             platformX += platformVel;
         }
 
