@@ -45,8 +45,8 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
                 GameView.started = true;
                 GameView.slinging = false;
 
-                xVelSin = (float) Math.cos((double) CharacterSprite.angle);
-                yVelCos = (float) Math.sin((double) CharacterSprite.angle);
+                xVelSin = (float) Math.cos((double) Sling.constrainedAngle);
+                yVelCos = (float) Math.sin((double) Sling.constrainedAngle);
 
                 GameView.xVelocity = (float) GameView.speed * xVelSin;
                 GameView.yVelocity = (float) GameView.speed * yVelCos;

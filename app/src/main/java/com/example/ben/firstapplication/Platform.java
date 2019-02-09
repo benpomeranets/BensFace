@@ -7,21 +7,36 @@ import android.graphics.RectF;
 
 public class Platform {
 
+    public static float platformVel = 0;
+
     public static float platformX = GameView.screenWidth / 2;
 
     public static RectF platformRect;
 
     public static float platformWidth = 175, platformHeight = 30;
 
-    private static float platformHeightOffGround = 70;
+    private static float platformHeightOffGround;
+
+    private static boolean canStartDragging = false;
 
     public void draw(Canvas canvas){
 
+        if(GameView.centerX != null){
+            platformHeightOffGround = (GameView.screenHeight) - (GameView.centerX[1]) - (GameView.imageWidth + 15);
+        }
+
         platformRect = new RectF(platformX - (platformWidth / 2), GameView.screenHeight - (platformHeight + platformHeightOffGround), platformX + (platformWidth / 2),
                 GameView.screenHeight - platformHeightOffGround);
-        if(MainActivity.isDraggingPlatform){
-            platformX = (float) MainActivity.mouseX;
+
+        if(CharacterSprite.y + GameView.imageWidth < GameView.screenHeight - (platformHeight + platformHeightOffGround) - 5){
+            canStartDragging = true;
         }
+
+        if(GameView.started && canStartDragging) {
+            platformVel = ((float) MainActivity.mouseX - platformX) / 10;
+            platformX += platformVel;
+        }
+
         Paint paint = new Paint();
         paint.setColor(Color.rgb(234, 105, 105));
         paint.setStyle(Paint.Style.FILL);

@@ -10,7 +10,7 @@ public class Sling{
 
     boolean visible;
 
-    public static int lineGrowingSpeed = 6;
+    public static int lineGrowingSpeed = 20;
 
     public static int lineLength = 0;
 
@@ -18,11 +18,20 @@ public class Sling{
 
     public static String lineIsGrowing = "false";
 
+    public static float constrainedAngle;
+
     public Sling(boolean slinging){
         this.visible = slinging;
     }
 
     public void draw(Canvas canvas){
+        if(CharacterSprite.angle >= (float) -2.44346095 && CharacterSprite.angle <= (float) -0.698131701){
+            constrainedAngle = CharacterSprite.angle;
+        }else if(CharacterSprite.angle < (float) -2.44346095){
+            constrainedAngle = (float) -2.44346095;
+        }else if(CharacterSprite.angle > (float) -0.698131701){
+            constrainedAngle = (float) -0.698131701;
+        }
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.rgb(234, 105, 105));
@@ -38,7 +47,7 @@ public class Sling{
         if(!CharacterSprite.useFixedRatio) {
             canvas.save();
             canvas.translate((float) CharacterSprite.x  + (float) (GameView.imageWidth / 2), (float) CharacterSprite.y + (float) (GameView.imageWidth / 2));
-            canvas.rotate(-90 + (float) Math.toDegrees(CharacterSprite.angle));
+            canvas.rotate(-90 + (float) Math.toDegrees(constrainedAngle));
             canvas.drawLine(0, 0, 0, lineLength, paint);
             canvas.restore();
         }else{

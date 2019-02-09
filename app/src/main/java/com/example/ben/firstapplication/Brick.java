@@ -13,9 +13,7 @@ public class Brick {
 
     public static List<float[]> bricks = new ArrayList<float[]>();
 
-    public static String sideContained = "none";
-
-    public static int maxBricks = 60;
+    public static int maxBricks = 48;
 
     static float lastBrickHitChangedDirections = 0;
 
@@ -29,13 +27,14 @@ public class Brick {
 
     public static RectF brickRect;
 
+    private Runnable once;
+
     public void draw(Canvas canvas) {
 
-        Paint paint = new Paint();
-        paint.setColor(Color.rgb(104, 130, 135));
-        paint.setStyle(Paint.Style.FILL);
-
         for (int i = 0; i < bricks.size(); i++) {
+
+            String sideContained = "none";
+
             bricks.get(i)[0] = 4 + (float) (i % 6) * (float) (Math.ceil(GameView.screenWidth / 6));
             bricks.get(i)[1] = 4 + (float) (Math.ceil(i / 6) * (float) (Math.ceil(GameView.screenHeight / 15)));
             bricks.get(i)[2] = 4 + (float) (i % 6) * (float) (Math.ceil(GameView.screenWidth / 6)) + (float) (Math.ceil(GameView.screenWidth / 6)) - 10;
@@ -46,6 +45,31 @@ public class Brick {
 
             float brickHeight = bricks.get(i)[3] - bricks.get(i)[1];
             float brickWidth = bricks.get(i)[2] - bricks.get(i)[0];
+
+            Paint paint = new Paint();
+            if(bricks.get(i)[4] == 5) {
+                paint.setColor(Color.rgb(104, 130, 135));
+
+            }else if(bricks.get(i)[4] == 4){
+                paint.setColor(Color.rgb(108, 145, 153));
+
+            }else if(bricks.get(i)[4] == 3){
+                paint.setColor(Color.rgb(106, 153, 163));
+
+            }else if(bricks.get(i)[4] == 2){
+                paint.setColor(Color.rgb(103, 165, 178));
+
+            }else if(bricks.get(i)[4] == 1){
+                paint.setColor(Color.rgb(101, 196, 216));
+
+            }
+            paint.setStyle(Paint.Style.FILL);
+
+            /*Paint paint1 = new Paint();
+            paint1.setStyle(Paint.Style.FILL);
+            paint1.setColor(Color.WHITE);
+
+            canvas.drawText(String.valueOf(bricks.get(i)[4]), bricks.get(i)[0], bricks.get(i)[1], paint1);*/
 
             if (bricks.get(i)[4] != 0) {
                 //canvas.drawRect(bricks.get(i)[0], bricks.get(i)[1], bricks.get(i)[2], bricks.get(i)[3], paint);
@@ -116,7 +140,9 @@ public class Brick {
             }else{
                 lastBrickHitChangedDirections = 0;
             }*/
+
             if (CharacterSprite.playerRect != null && GameView.started && CharacterSprite.heightAwayFromStart >= 50) {
+
                 if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.top)) && bricks.get(i)[4] != 0
                         && GameView.yVelocity < 0 && !sideContained.equals("bottom") && !sideContained.equals("right") && !sideContained.equals("left")) {
 
