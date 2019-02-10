@@ -48,6 +48,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static float screenWidthToHeightRatio;
 
+    float platFormToBallAngle;
+
     public GameView(Context context){
 
         super(context);
@@ -131,9 +133,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(platform != null && platform.platformRect != null && started && yVelocity > 0) {
             if (platform.platformRect.contains((float) CharacterSprite.x, CharacterSprite.playerRect.bottom) ||
                     platform.platformRect.contains((float) CharacterSprite.x + GameView.imageWidth, CharacterSprite.playerRect.bottom)) {
+
+                platFormToBallAngle = ((float) Math.atan2(((float) Platform.platformRect.bottom) - ((float) (CharacterSprite.y + (float) (GameView.imageWidth / 2))), ((float) Platform.platformRect.centerX()) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
+
                 synchronized(this) {
                     CharacterSprite.y = platform.platformRect.top - (GameView.imageWidth + 1);
-                    yVelocity = yVelocity * -1;
+                    GameView.xVelocity = (float) GameView.speed * (float) Math.cos((double) platFormToBallAngle) * -1;
+                    GameView.yVelocity = (float) GameView.speed * (float) Math.sin((double) platFormToBallAngle) * -1;
                 }
             }
         }
