@@ -35,7 +35,7 @@ public class Sling{
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.rgb(234, 105, 105));
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth((int) (GameView.imageWidth / 7));
         paint.setStrokeCap(Paint.Cap.ROUND);
 
         if(lineIsGrowing.equals("done")){

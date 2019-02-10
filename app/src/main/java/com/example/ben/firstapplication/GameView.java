@@ -30,7 +30,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     //double gravity;
 
-    public static int imageWidth = 65;
+    public static int imageWidth = 50;
 
     public static boolean started = false;
 

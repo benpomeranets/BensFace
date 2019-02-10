@@ -19,7 +19,7 @@ public class Brick {
 
     public static List<float[]> bricks = new ArrayList<float[]>();
 
-    public static int maxBricks = 48;
+    public static int maxBricks = 150;
 
     public Brick(){
 
@@ -41,10 +41,10 @@ public class Brick {
         for (int i = 0; i < bricks.size(); i++) {
 
             //the parameters for the bricks
-            bricks.get(i)[0] = 4 + (float) (i % 6) * (float) (Math.ceil(GameView.screenWidth / 6));
-            bricks.get(i)[1] = 4 + (float) (Math.ceil(i / 6) * (float) (Math.ceil(GameView.screenHeight / 15)));
-            bricks.get(i)[2] = 4 + (float) (i % 6) * (float) (Math.ceil(GameView.screenWidth / 6)) + (float) (Math.ceil(GameView.screenWidth / 6)) - 10;
-            bricks.get(i)[3] = 4 + (float) (Math.ceil(i / 6) * (float) (Math.ceil(GameView.screenHeight / 15))) + ((float) (Math.ceil((GameView.screenHeight / 15)) - 10));
+            bricks.get(i)[0] = 4 + (float) (i % 10) * (float) (Math.ceil(GameView.screenWidth / 10));
+            bricks.get(i)[1] = 4 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25)));
+            bricks.get(i)[2] = 4 + (float) (i % 10) * (float) (Math.ceil(GameView.screenWidth / 10)) + (float) (Math.ceil(GameView.screenWidth / 10)) - 6;
+            bricks.get(i)[3] = 4 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25))) + ((float) (Math.ceil((GameView.screenHeight / 25)) - 6));
             bricks.get(i)[5] = 0;
 
             btl = new Point((int) bricks.get(i)[0], (int) bricks.get(i)[1]);
@@ -102,7 +102,7 @@ public class Brick {
                 if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
                     //deleting the brick when it is hit
 
-                    if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[3]) - (CharacterSprite.y)) <= (brickWidth / 2) + (GameView.imageWidth / 3)
+                    if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[3]) - (CharacterSprite.y)) <= (brickWidth / 2) + (GameView.imageWidth / 2)
                         && CharacterSprite.y >= (bricks.get(i)[3] - brickHeight / 2) && GameView.yVelocity < 0) {
                         bricks.get(i)[4] = 0;
                         GameView.yVelocity *= -1;
@@ -113,7 +113,7 @@ public class Brick {
                 if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
                     //deleting the brick when it is hit
 
-                    if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[1]) - (CharacterSprite.y + GameView.imageWidth)) <= (brickWidth / 2) + (GameView.imageWidth / 3)
+                    if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[1]) - (CharacterSprite.y + GameView.imageWidth)) <= (brickWidth / 2) + (GameView.imageWidth / 2)
                             && CharacterSprite.y <= (bricks.get(i)[1] + brickHeight / 2) && GameView.yVelocity > 0) {
                         bricks.get(i)[4] = 0;
                         GameView.yVelocity *= -1;
