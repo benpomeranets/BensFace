@@ -115,9 +115,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             CharacterSprite.y += yVelocity;
 
         }
-        if ((CharacterSprite.x >= screenWidth - CharacterSprite.scaledImage.getWidth())) {
+        if ((CharacterSprite.x >= screenWidth - imageWidth)) {
            // synchronized(this) {
-                CharacterSprite.x = screenWidth - CharacterSprite.scaledImage.getWidth() - 1;
+                CharacterSprite.x = screenWidth - GameView.imageWidth - 1;
                 xVelocity = xVelocity * -1;
            // }
         }

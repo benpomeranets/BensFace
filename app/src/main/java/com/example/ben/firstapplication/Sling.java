@@ -44,15 +44,11 @@ public class Sling{
             lineLength = 0;
         }
 
-        if(!CharacterSprite.useFixedRatio) {
-            canvas.save();
-            canvas.translate((float) CharacterSprite.x  + (float) (GameView.imageWidth / 2), (float) CharacterSprite.y + (float) (GameView.imageWidth / 2));
-            canvas.rotate(-90 + (float) Math.toDegrees(constrainedAngle));
-            canvas.drawLine(0, 0, 0, lineLength, paint);
-            canvas.restore();
-        }else{
-            canvas.drawCircle((float) CharacterSprite.x + (float) (GameView.imageWidth / 2), (float) CharacterSprite.y + (float) (CharacterSprite.intImageHeight / 2), Math.round((float) GameView.imageWidth / 21), paint);
-        }
+        canvas.save();
+        canvas.translate((float) CharacterSprite.x  + (float) (GameView.imageWidth / 2), (float) CharacterSprite.y + (float) (GameView.imageWidth / 2));
+        canvas.rotate(-90 + (float) Math.toDegrees(constrainedAngle));
+        canvas.drawLine(0, 0, 0, lineLength, paint);
+        canvas.restore();
 
     }
 

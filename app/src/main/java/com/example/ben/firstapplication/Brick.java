@@ -1,9 +1,13 @@
 package com.example.ben.firstapplication;
 
+import android.animation.RectEvaluator;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.constraint.solver.widgets.ChainHead;
 import android.support.constraint.solver.widgets.Rectangle;
 
 import java.util.ArrayList;
@@ -11,15 +15,11 @@ import java.util.List;
 
 public class Brick {
 
+    Point ptl, ptr, pbl, pbr;
+
     public static List<float[]> bricks = new ArrayList<float[]>();
 
     public static int maxBricks = 48;
-
-    static float lastBrickHitChangedDirections = 0;
-
-    public static boolean canContinue = true;
-
-    boolean isProcessing = false;
 
     public Brick(){
 
@@ -31,17 +31,35 @@ public class Brick {
 
     public void draw(Canvas canvas) {
 
+        Point btl, btr, bbl, bbr, center;
+
+        ptl = new Point((int) CharacterSprite.x, (int) CharacterSprite.y);
+        ptr = new Point((int) CharacterSprite.x + (int) GameView.imageWidth, (int) CharacterSprite.y);
+        pbl = new Point((int) CharacterSprite.x, (int) CharacterSprite.y + (int) (GameView.imageWidth));
+        pbr = new Point((int) CharacterSprite.x + (int) GameView.imageWidth, (int) CharacterSprite.y + (int) GameView.imageWidth);
+
         for (int i = 0; i < bricks.size(); i++) {
 
-            String sideContained = "none";
-
+            //the parameters for the bricks
             bricks.get(i)[0] = 4 + (float) (i % 6) * (float) (Math.ceil(GameView.screenWidth / 6));
             bricks.get(i)[1] = 4 + (float) (Math.ceil(i / 6) * (float) (Math.ceil(GameView.screenHeight / 15)));
             bricks.get(i)[2] = 4 + (float) (i % 6) * (float) (Math.ceil(GameView.screenWidth / 6)) + (float) (Math.ceil(GameView.screenWidth / 6)) - 10;
             bricks.get(i)[3] = 4 + (float) (Math.ceil(i / 6) * (float) (Math.ceil(GameView.screenHeight / 15))) + ((float) (Math.ceil((GameView.screenHeight / 15)) - 10));
             bricks.get(i)[5] = 0;
 
-            brickRect = new RectF(bricks.get(i)[0], bricks.get(i)[1], bricks.get(i)[2], bricks.get(i)[3]);
+            btl = new Point((int) bricks.get(i)[0], (int) bricks.get(i)[1]);
+            btr = new Point((int) bricks.get(i)[2], (int) bricks.get(i)[1]);
+            bbl = new Point((int) bricks.get(i)[0], (int) bricks.get(i)[3]);
+            bbr = new Point((int) bricks.get(i)[2], (int) bricks.get(i)[3]);
+
+            center = new Point((int) ((bricks.get(i)[0] + bricks.get(i)[2]) / 2), (int) ((bricks.get(i)[1] + bricks.get(i)[3]) / 2));
+
+            //angle = ((float) Math.atan2(((float) mouseY) - ((float) (CharacterSprite.y) + (float) (GameView.imageWidth / 2)), ((float) mouseX) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
+
+
+
+            //the brick rectangle
+            brickRect = new RectF((float) bricks.get(i)[0], (float) bricks.get(i)[1], (float) bricks.get(i)[2], (float) bricks.get(i)[3]);
 
             float brickHeight = bricks.get(i)[3] - bricks.get(i)[1];
             float brickWidth = bricks.get(i)[2] - bricks.get(i)[0];
@@ -63,141 +81,57 @@ public class Brick {
                 paint.setColor(Color.rgb(101, 196, 216));
 
             }
+
             paint.setStyle(Paint.Style.FILL);
 
-            /*Paint paint1 = new Paint();
-            paint1.setStyle(Paint.Style.FILL);
-            paint1.setColor(Color.WHITE);
-
-            canvas.drawText(String.valueOf(bricks.get(i)[4]), bricks.get(i)[0], bricks.get(i)[1], paint1);*/
-
+            //drawing the bricks if it has any lives left
             if (bricks.get(i)[4] != 0) {
-                //canvas.drawRect(bricks.get(i)[0], bricks.get(i)[1], bricks.get(i)[2], bricks.get(i)[3], paint);
                 canvas.drawRect(brickRect, paint);
             }
-            //0 = left 1 = top 2 = right 3 = bottom
 
-            /*if((CharacterSprite.x <= bricks.get(i)[2] && CharacterSprite.x + GameView.imageWidth >= bricks.get(i)[0])
-            && CharacterSprite.y <= bricks.get(i)[3] && CharacterSprite.y + GameView.imageWidth >= bricks.get(i)[1] && bricks.get(i)[4] != 0 && canContinue){
-                //lastBrickHitChangedDirections = 0;
-                if(CharacterSprite.x >= bricks.get(i)[0]  && CharacterSprite.x <= bricks.get(i)[2] && GameView.yVelocity < 0 && canContinue
-                        && CharacterSprite.y <= bricks.get(i)[3] && CharacterSprite.y > bricks.get(i)[3] - (brickHeight / 10)){
-                    do {
-                        canContinue = false;
-                        synchronized (this) {
-                            GameView.yVelocity *= -1;
-                            lastBrickHitChangedDirections = 1;
-                            canContinue = true;
-                            isProcessing = true;
-                            bricks.get(i)[4] = 0;
-                            lastBrickHitChangedDirections = 0;
-                        }
-                    }while(CharacterSprite.x >= bricks.get(i)[0]  && CharacterSprite.x <= bricks.get(i)[2] && GameView.yVelocity < 0 && canContinue
-                            && CharacterSprite.y <= bricks.get(i)[3] && CharacterSprite.y > bricks.get(i)[3] - (brickHeight / 10));
-                }else if(CharacterSprite.x >= bricks.get(i)[0]  && CharacterSprite.x <= bricks.get(i)[2] && GameView.yVelocity > 0 && canContinue
-                        && CharacterSprite.y + GameView.imageWidth >= bricks.get(i)[1] && CharacterSprite.y + GameView.imageWidth < bricks.get(i)[1] + (brickHeight / 10)) {
-                    do {
-                        canContinue = false;
-                        synchronized (this) {
-                            GameView.yVelocity *= -1;
-                            lastBrickHitChangedDirections = 1;
-                            canContinue = true;
-                            isProcessing = true;
-                            bricks.get(i)[4] = 0;
-                            lastBrickHitChangedDirections = 0;
-                        }
-                    }while(CharacterSprite.x >= bricks.get(i)[0]  && CharacterSprite.x <= bricks.get(i)[2] && GameView.yVelocity > 0 && canContinue
-                            && CharacterSprite.y + GameView.imageWidth >= bricks.get(i)[1] && CharacterSprite.y + GameView.imageWidth < bricks.get(i)[1] + (brickHeight / 10));
-                }if(CharacterSprite.x <= (bricks.get(i)[2]) && CharacterSprite.x >= (bricks.get(i)[2] - (brickWidth / 10)) && (CharacterSprite.y + (GameView.imageWidth / 2)) <= (bricks.get(i)[3])
-                        && (CharacterSprite.y + (GameView.imageWidth / 2)) >= bricks.get(i)[1] && GameView.xVelocity < 0){
-                    do {
-                        canContinue = false;
-                        synchronized (this) {
-                            GameView.xVelocity *= -1;
-                            lastBrickHitChangedDirections = 1;
-                            canContinue = true;
-                            isProcessing = true;
-                            bricks.get(i)[4] = 0;
-                            lastBrickHitChangedDirections = 0;
-                        }
-                    }while(CharacterSprite.x <= (bricks.get(i)[2]) && CharacterSprite.x >= (bricks.get(i)[2] - (brickWidth / 10)) && (CharacterSprite.y + (GameView.imageWidth / 2)) <= (bricks.get(i)[3])
-                            && (CharacterSprite.y + (GameView.imageWidth / 2)) >= bricks.get(i)[1] && GameView.xVelocity < 0);
-                }else if(CharacterSprite.x >= (bricks.get(i)[0]) && CharacterSprite.x <= (bricks.get(i)[0] + (brickWidth / 10)) && (CharacterSprite.y + (GameView.imageWidth / 2)) <= (bricks.get(i)[3])
-                        && (CharacterSprite.y + (GameView.imageWidth / 2)) >= bricks.get(i)[1] && GameView.xVelocity > 0){
-                    do {
-                        canContinue = false;
-                        synchronized (this) {
-                            GameView.xVelocity *= -1;
-                            lastBrickHitChangedDirections = 1;
-                            canContinue = true;
-                            isProcessing = true;
-                            bricks.get(i)[4] = 0;
-                            lastBrickHitChangedDirections = 0;
-                        }
-                    }while(CharacterSprite.x >= (bricks.get(i)[0]) && CharacterSprite.x <= (bricks.get(i)[0] + (brickWidth / 10)) && (CharacterSprite.y + (GameView.imageWidth / 2)) <= (bricks.get(i)[3])
-                            && (CharacterSprite.y + (GameView.imageWidth / 2)) >= bricks.get(i)[1] && GameView.xVelocity > 0);
-                }
-            }else{
-                lastBrickHitChangedDirections = 0;
-            }
+            //angle = ((float) Math.atan2(((float) mouseY) - ((float) (CharacterSprite.y) + (float) (GameView.imageWidth / 2)), ((float) mouseX) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
 
-            if (CharacterSprite.playerRect != null && GameView.started && CharacterSprite.heightAwayFromStart >= 50) {
 
-                if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.top)) && bricks.get(i)[4] != 0
-                        && GameView.yVelocity < 0 && !sideContained.equals("bottom") && !sideContained.equals("right") && !sideContained.equals("left")) {
-
-                    if ((float) bricks.get(i)[3] - (float) CharacterSprite.y <= 30.0) {
-                        sideContained = "top";
-                    }
-                }
-                if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.bottom) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0
-                        && GameView.yVelocity > 0 && !sideContained.equals("top") && !sideContained.equals("right") && !sideContained.equals("left")) {
-
-                    if ((float) bricks.get(i)[1] - (float) CharacterSprite.y + (float) GameView.imageWidth <= 30.0) {
-                        sideContained = "bottom";
-                    }
-                }
-                if ((brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.right, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0
-                        && GameView.xVelocity > 0 && !sideContained.equals("bottom") && !sideContained.equals("top") && !sideContained.equals("left")) {
-                    sideContained = "right";
-                }
-                if ((brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.top) || brickRect.contains(CharacterSprite.playerRect.left, CharacterSprite.playerRect.bottom)) && bricks.get(i)[4] != 0
-                        && GameView.xVelocity < 0 && !sideContained.equals("bottom") && !sideContained.equals("right") && !sideContained.equals("top")) {
-
-                    sideContained = "left";
-                }
-            }
-
-            if(sideContained.equals("top")){
-                bricks.get(i)[4] = 0;
-                GameView.yVelocity *= -1;
-                sideContained = "none";
-            }if(sideContained.equals("bottom")){
-                bricks.get(i)[4] = 0;
-                GameView.yVelocity *= -1;
-                sideContained = "none";
-            }if(sideContained.equals("right")){
-                bricks.get(i)[4] = 0;
-                GameView.xVelocity *= -1;
-                sideContained = "none";
-            }if(sideContained.equals("left")){
-                bricks.get(i)[4] = 0;
-                GameView.xVelocity *= -1;
-                sideContained = "none";
-            }*/
+            float angle_from_bottom_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
+            float angle_from_bottom_right = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[2]))));
+            float angle_from_top_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[1])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
+            float angle_from_top_right = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[1])), ((float) center.x) - ((float) (bricks.get(i)[2]))));
 
             if(CharacterSprite.playerRect != null) {
-                if (CharacterSprite.playerRect.intersect(brickRect) && bricks.get(i)[4] != 0) {
-                    if((((float) CharacterSprite.y <= (float) brickRect.bottom && (float) brickRect.bottom - (float) CharacterSprite.y <= (float) (GameView.speed * 2)) && GameView.yVelocity < 0) ||
-                        ((float) CharacterSprite.y + (float) GameView.imageWidth >= (float) brickRect.top && (((float) CharacterSprite.y + (float) GameView.imageWidth)) - (float) brickRect.top <= (float) (GameView.speed * 2)) && GameView.yVelocity > 0){
 
+                if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
+                    //deleting the brick when it is hit
+
+                    if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[3]) - (CharacterSprite.y)) <= (brickWidth / 2) + (GameView.imageWidth / 3)
+                        && CharacterSprite.y >= (bricks.get(i)[3] - brickHeight / 2) && GameView.yVelocity < 0) {
                         bricks.get(i)[4] = 0;
                         GameView.yVelocity *= -1;
+                    }else if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[1]) - (CharacterSprite.y + GameView.imageWidth)) <= (brickWidth / 2) + (GameView.imageWidth / 3)
+                            && CharacterSprite.y <= (bricks.get(i)[1] + brickHeight / 2) && GameView.yVelocity > 0) {
+                        bricks.get(i)[4] = 0;
+                        GameView.yVelocity *= -1;
+                    }else if((CharacterSprite.x + GameView.imageWidth) > (bricks.get(i)[2]) && GameView.xVelocity < 0){
+                        bricks.get(i)[4] = 0;
+                        GameView.xVelocity *= -1;
+                    }else if((CharacterSprite.x) < (bricks.get(i)[0]) && GameView.xVelocity > 0){
+                        bricks.get(i)[4] = 0;
+                        GameView.xVelocity *= -1;
+                    }else{
+                        GameView.xVelocity *= 1;
+                        GameView.yVelocity *= 1;
+                    }
 
-                    }else if(((float) CharacterSprite.x + (float) GameView.imageWidth >= (float) brickRect.left && GameView.xVelocity > 0) || ((float) CharacterSprite.x <= (float) brickRect.right && GameView.xVelocity < 0)){
+                    /*if((Math.sqrt((bricks.get(i)[0] - (CharacterSprite.x + (GameView.imageWidth / 2))) + ((bricks.get(i)[3] + bricks.get(i)[1]) / 2) - (CharacterSprite.y + (GameView.imageWidth / 2))) <= (brickHeight / 2) + (GameView.imageWidth / 2)
+                            && CharacterSprite.x >= (bricks.get(i)[0] + brickWidth / 2) && GameView.xVelocity > 0)) {
                         bricks.get(i)[4] = 0;
                         GameView.xVelocity *= -1;
                     }
+
+                    if((Math.sqrt((bricks.get(i)[2] - (CharacterSprite.x + (GameView.imageWidth / 2))) + ((bricks.get(i)[3] + bricks.get(i)[1]) / 2) - (CharacterSprite.y + (GameView.imageWidth / 2))) <= (brickHeight / 2) + (GameView.imageWidth / 2)
+                            && CharacterSprite.x <= (bricks.get(i)[2] - brickWidth / 2) && GameView.xVelocity < 0)) {
+                        bricks.get(i)[4] = 0;
+                        GameView.xVelocity *= -1;
+                    }*/
                 }
             }
 
