@@ -106,33 +106,40 @@ public class Brick {
                         && CharacterSprite.y >= (bricks.get(i)[3] - brickHeight / 2) && GameView.yVelocity < 0) {
                         bricks.get(i)[4] = 0;
                         GameView.yVelocity *= -1;
-                    }else if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[1]) - (CharacterSprite.y + GameView.imageWidth)) <= (brickWidth / 2) + (GameView.imageWidth / 3)
+                    }
+
+                }
+
+                if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
+                    //deleting the brick when it is hit
+
+                    if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[1]) - (CharacterSprite.y + GameView.imageWidth)) <= (brickWidth / 2) + (GameView.imageWidth / 3)
                             && CharacterSprite.y <= (bricks.get(i)[1] + brickHeight / 2) && GameView.yVelocity > 0) {
                         bricks.get(i)[4] = 0;
                         GameView.yVelocity *= -1;
-                    }else if((CharacterSprite.x + GameView.imageWidth) > (bricks.get(i)[2]) && GameView.xVelocity < 0){
-                        bricks.get(i)[4] = 0;
-                        GameView.xVelocity *= -1;
-                    }else if((CharacterSprite.x) < (bricks.get(i)[0]) && GameView.xVelocity > 0){
-                        bricks.get(i)[4] = 0;
-                        GameView.xVelocity *= -1;
-                    }else{
-                        GameView.xVelocity *= 1;
-                        GameView.yVelocity *= 1;
                     }
-
-                    /*if((Math.sqrt((bricks.get(i)[0] - (CharacterSprite.x + (GameView.imageWidth / 2))) + ((bricks.get(i)[3] + bricks.get(i)[1]) / 2) - (CharacterSprite.y + (GameView.imageWidth / 2))) <= (brickHeight / 2) + (GameView.imageWidth / 2)
-                            && CharacterSprite.x >= (bricks.get(i)[0] + brickWidth / 2) && GameView.xVelocity > 0)) {
-                        bricks.get(i)[4] = 0;
-                        GameView.xVelocity *= -1;
-                    }
-
-                    if((Math.sqrt((bricks.get(i)[2] - (CharacterSprite.x + (GameView.imageWidth / 2))) + ((bricks.get(i)[3] + bricks.get(i)[1]) / 2) - (CharacterSprite.y + (GameView.imageWidth / 2))) <= (brickHeight / 2) + (GameView.imageWidth / 2)
-                            && CharacterSprite.x <= (bricks.get(i)[2] - brickWidth / 2) && GameView.xVelocity < 0)) {
-                        bricks.get(i)[4] = 0;
-                        GameView.xVelocity *= -1;
-                    }*/
                 }
+
+                if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
+                    //deleting the brick when it is hit
+
+                    if((CharacterSprite.x + GameView.imageWidth) > (bricks.get(i)[2]) && GameView.xVelocity < 0){
+                        bricks.get(i)[4] = 0;
+                        GameView.xVelocity *= -1;
+                    }
+
+                }
+
+                if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
+                    //deleting the brick when it is hit
+
+                    if((CharacterSprite.x) < (bricks.get(i)[0]) && GameView.xVelocity > 0){
+                        bricks.get(i)[4] = 0;
+                        GameView.xVelocity *= -1;
+                    }
+
+                }
+
             }
 
         }
