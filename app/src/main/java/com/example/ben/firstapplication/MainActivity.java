@@ -88,6 +88,8 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
            // GameView.isPaused = true;
         }else*/ if(!GameView.started){
             GameView.slinging = true;
+        }else{
+            isDraggingPlatform = true;
         }
 
         return false;
@@ -114,7 +116,7 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
         }
 
         if(GameView.started) {
-            isDraggingPlatform = true;
+
         }
 
         return false;

@@ -26,6 +26,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Brick brick;
 
+    private Pause pause;
+
     public static boolean isPaused = false;
 
     //double gravity;
@@ -80,6 +82,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         sling = new Sling(slinging);
         brick = new Brick();
         platform = new Platform();
+        pause = new Pause();
         // Will  change the third parameter (projectedSling) once you create the image for it.need to
         thread.setRunning(true);
         thread.start();
@@ -169,6 +172,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(started){
             platform.draw(canvas);
         }
+        pause.draw(canvas);
     }
 
 }

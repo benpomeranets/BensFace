@@ -89,57 +89,37 @@ public class Brick {
                 canvas.drawRect(brickRect, paint);
             }
 
-            //angle = ((float) Math.atan2(((float) mouseY) - ((float) (CharacterSprite.y) + (float) (GameView.imageWidth / 2)), ((float) mouseX) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
-
-
             float angle_from_bottom_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
             float angle_from_bottom_right = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[2]))));
             float angle_from_top_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[1])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
             float angle_from_top_right = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[1])), ((float) center.x) - ((float) (bricks.get(i)[2]))));
 
+            float angle_between_centroids = ((float) Math.atan2(((float) center.y) - (float) (CharacterSprite.y + (GameView.imageWidth / 2)),
+                ((float) center.x) - ((float) (CharacterSprite.x + (GameView.imageWidth / 2)))));
+
             if(CharacterSprite.playerRect != null) {
 
-                if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
-                    //deleting the brick when it is hit
+                if(RectF.intersects(CharacterSprite.playerRect, brickRect) && bricks.get(i)[4] != 0){
 
-                    if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[3]) - (CharacterSprite.y)) <= (brickWidth / 2) + (GameView.imageWidth / 2)
-                        && CharacterSprite.y >= (bricks.get(i)[3] - brickHeight / 2) && GameView.yVelocity < 0) {
+                    //TODO: add to 'if' statements a constraint that the player has to be above, below, or to a certain side of the brick rectangle in order to change certain directions
+
+                    if(angle_between_centroids <= angle_from_bottom_left && angle_between_centroids >= angle_from_bottom_right){
                         bricks.get(i)[4] = 0;
                         GameView.yVelocity *= -1;
-                    }
-
-                }
-
-                if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
-                    //deleting the brick when it is hit
-
-                    if(Math.sqrt(((bricks.get(i)[0] + (bricks.get(i)[2]) / 2) - (CharacterSprite.x + (GameView.imageWidth / 2))) + (bricks.get(i)[1]) - (CharacterSprite.y + GameView.imageWidth)) <= (brickWidth / 2) + (GameView.imageWidth / 2)
-                            && CharacterSprite.y <= (bricks.get(i)[1] + brickHeight / 2) && GameView.yVelocity > 0) {
+                    }else if(angle_between_centroids > angle_from_bottom_left && angle_between_centroids <= angle_from_top_left && GameView.xVelocity > 0){
+                        bricks.get(i)[4] = 0;
+                        GameView.xVelocity *= -1;
+                    }else if(angle_between_centroids > angle_from_top_left && angle_between_centroids <= angle_from_top_right && GameView.yVelocity > 0){
                         bricks.get(i)[4] = 0;
                         GameView.yVelocity *= -1;
-                    }
-                }
-
-                if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
-                    //deleting the brick when it is hit
-
-                    if((CharacterSprite.x + GameView.imageWidth) > (bricks.get(i)[2]) && GameView.xVelocity < 0){
+                    }else if(angle_between_centroids > angle_from_top_right && angle_between_centroids < angle_from_bottom_right && GameView.xVelocity < 0){
                         bricks.get(i)[4] = 0;
                         GameView.xVelocity *= -1;
-                    }
-
-                }
-
-                if(RectF.intersects(brickRect, CharacterSprite.playerRect) && bricks.get(i)[4] != 0){
-                    //deleting the brick when it is hit
-
-                    if((CharacterSprite.x) < (bricks.get(i)[0]) && GameView.xVelocity > 0){
+                    }else{
                         bricks.get(i)[4] = 0;
-                        GameView.xVelocity *= -1;
                     }
 
                 }
-
             }
 
         }
