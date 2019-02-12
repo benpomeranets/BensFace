@@ -89,36 +89,54 @@ public class Brick {
                 canvas.drawRect(brickRect, paint);
             }
 
-            float angle_from_bottom_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
+            /*float angle_from_bottom_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
             float angle_from_bottom_right = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[2]))));
             float angle_from_top_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[1])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
             float angle_from_top_right = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[1])), ((float) center.x) - ((float) (bricks.get(i)[2]))));
 
             float angle_between_centroids = ((float) Math.atan2(((float) center.y) - (float) (CharacterSprite.y + (GameView.imageWidth / 2)),
-                ((float) center.x) - ((float) (CharacterSprite.x + (GameView.imageWidth / 2)))));
+                ((float) center.x) - ((float) (CharacterSprite.x + (GameView.imageWidth / 2)))));*/
+
+            float w = (float) 0.5 * ((float) GameView.imageWidth + brickWidth);
+            float h = (float) 0.5 * ((float) GameView.imageWidth + brickHeight);
+            float dx = ((float) CharacterSprite.x + (float) (GameView.imageWidth / 2)) - center.x;
+            float dy = ((float) CharacterSprite.y + (float) (GameView.imageWidth / 2)) - center.y;
 
             if(CharacterSprite.playerRect != null) {
+                if (Math.abs(dx) <= w && Math.abs(dy) <= h && bricks.get(i)[4] != 0) {
+                    /* collision! */
+                    float wy = w * dy;
+                    float hx = h * dx;
 
-                if(RectF.intersects(CharacterSprite.playerRect, brickRect) && bricks.get(i)[4] != 0){
-
-                    //TODO: add to 'if' statements a constraint that the player has to be above, below, or to a certain side of the brick rectangle in order to change certain directions
-
-                    if(angle_between_centroids <= angle_from_bottom_left && angle_between_centroids >= angle_from_bottom_right){
-                        bricks.get(i)[4] = 0;
-                        GameView.yVelocity *= -1;
-                    }else if(angle_between_centroids > angle_from_bottom_left && angle_between_centroids <= angle_from_top_left && GameView.xVelocity > 0){
-                        bricks.get(i)[4] = 0;
-                        GameView.xVelocity *= -1;
-                    }else if(angle_between_centroids > angle_from_top_left && angle_between_centroids <= angle_from_top_right && GameView.yVelocity > 0){
-                        bricks.get(i)[4] = 0;
-                        GameView.yVelocity *= -1;
-                    }else if(angle_between_centroids > angle_from_top_right && angle_between_centroids < angle_from_bottom_right && GameView.xVelocity < 0){
-                        bricks.get(i)[4] = 0;
-                        GameView.xVelocity *= -1;
+                    if (wy > hx){
+                        if (wy > -hx) {
+                            /* on the top */
+                            if(GameView.yVelocity < 0) {
+                                bricks.get(i)[4] = 0; //deleting the brick
+                                GameView.yVelocity *= -1; //changing directions
+                            }
+                        } else {
+                            if(GameView.xVelocity > 0) {
+                                /* on the left */
+                                bricks.get(i)[4] = 0;
+                                GameView.xVelocity *= -1;
+                            }
+                        }
                     }else{
-                        bricks.get(i)[4] = 0;
+                        if (wy > -hx) {
+                            /* on the right */
+                            if(GameView.xVelocity < 0) {
+                                bricks.get(i)[4] = 0;
+                                GameView.xVelocity *= -1;
+                            }
+                        } else{
+                            if(GameView.yVelocity > 0) {
+                                /* at the bottom */
+                                bricks.get(i)[4] = 0;
+                                GameView.yVelocity *= -1;
+                            }
+                        }
                     }
-
                 }
             }
 
