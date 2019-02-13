@@ -19,7 +19,7 @@ public class Brick {
 
     public static List<float[]> bricks = new ArrayList<float[]>();
 
-    public static int maxBricks = 150;
+    public static int maxBricks = 130;
 
     public Brick(){
 
@@ -65,21 +65,15 @@ public class Brick {
             float brickWidth = bricks.get(i)[2] - bricks.get(i)[0];
 
             Paint paint = new Paint();
-            if(bricks.get(i)[4] == 5) {
+
+            if(bricks.get(i)[4] >= 3) {
                 paint.setColor(Color.rgb(104, 130, 135));
 
-            }else if(bricks.get(i)[4] == 4){
-                paint.setColor(Color.rgb(108, 145, 153));
-
-            }else if(bricks.get(i)[4] == 3){
-                paint.setColor(Color.rgb(106, 153, 163));
-
             }else if(bricks.get(i)[4] == 2){
-                paint.setColor(Color.rgb(103, 165, 178));
+                paint.setColor(Color.rgb(112, 152, 160));
 
-            }else if(bricks.get(i)[4] == 1){
-                paint.setColor(Color.rgb(101, 196, 216));
-
+            }else if(bricks.get(i)[4] == 1) {
+                paint.setColor(Color.rgb(117, 174, 186));
             }
 
             paint.setStyle(Paint.Style.FILL);
@@ -112,13 +106,13 @@ public class Brick {
                         if (wy > -hx) {
                             /* on the top */
                             if(GameView.yVelocity < 0) {
-                                bricks.get(i)[4] = 0; //deleting the brick
+                                bricks.get(i)[4] -= 1; //deleting the brick
                                 GameView.yVelocity *= -1; //changing directions
                             }
                         } else {
                             if(GameView.xVelocity > 0) {
                                 /* on the left */
-                                bricks.get(i)[4] = 0;
+                                bricks.get(i)[4] -= 1;
                                 GameView.xVelocity *= -1;
                             }
                         }
@@ -126,13 +120,13 @@ public class Brick {
                         if (wy > -hx) {
                             /* on the right */
                             if(GameView.xVelocity < 0) {
-                                bricks.get(i)[4] = 0;
+                                bricks.get(i)[4] -= 1;
                                 GameView.xVelocity *= -1;
                             }
                         } else{
                             if(GameView.yVelocity > 0) {
                                 /* at the bottom */
-                                bricks.get(i)[4] = 0;
+                                bricks.get(i)[4] -= 1;
                                 GameView.yVelocity *= -1;
                             }
                         }

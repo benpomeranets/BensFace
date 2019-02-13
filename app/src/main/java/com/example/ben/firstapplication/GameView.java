@@ -74,7 +74,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         for(int i = 0; i < Brick.maxBricks; i ++){
             Brick.bricks.add(new float[7]);
-            Brick.bricks.get(i)[4] = 5;
+            Brick.bricks.get(i)[4] = 3;
             Brick.bricks.get(i)[6] = 0;
         }
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
