@@ -25,11 +25,11 @@ public class Sling{
     }
 
     public void draw(Canvas canvas){
-        if(CharacterSprite.angle >= (float) -2.44346095 && CharacterSprite.angle <= (float) -0.698131701){
+        if(CharacterSprite.angle >= (float) -2.44346095 && CharacterSprite.angle <= (float) -0.698131701 && !GameView.isPaused){
             constrainedAngle = CharacterSprite.angle;
-        }else if(CharacterSprite.angle < (float) -2.44346095){
+        }else if(CharacterSprite.angle < (float) -2.44346095 && !GameView.isPaused){
             constrainedAngle = (float) -2.44346095;
-        }else if(CharacterSprite.angle > (float) -0.698131701){
+        }else if(CharacterSprite.angle > (float) -0.698131701 && !GameView.isPaused){
             constrainedAngle = (float) -0.698131701;
         }
         Paint paint = new Paint();
@@ -38,7 +38,7 @@ public class Sling{
         paint.setStrokeWidth((int) (GameView.imageWidth / 7));
         paint.setStrokeCap(Paint.Cap.ROUND);
 
-        if(lineIsGrowing.equals("done")){
+        if(lineIsGrowing.equals("done") && !GameView.isPaused){
             lineLength = maxLineLength;
         }else if(lineIsGrowing.equals("false")){
             lineLength = 0;

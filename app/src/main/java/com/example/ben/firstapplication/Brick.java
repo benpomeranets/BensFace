@@ -40,11 +40,15 @@ public class Brick {
 
         for (int i = 0; i < bricks.size(); i++) {
 
+            if(i <= 10 || i % 10 == 0 || i % 10 == 9 || i >= maxBricks - 9){
+                bricks.get(i)[4] = 0;
+            }
+
             //the parameters for the bricks
             bricks.get(i)[0] = 4 + (float) (i % 10) * (float) (Math.ceil(GameView.screenWidth / 10));
-            bricks.get(i)[1] = 4 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25)));
+            bricks.get(i)[1] = 40 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25)));
             bricks.get(i)[2] = 4 + (float) (i % 10) * (float) (Math.ceil(GameView.screenWidth / 10)) + (float) (Math.ceil(GameView.screenWidth / 10)) - 6;
-            bricks.get(i)[3] = 4 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25))) + ((float) (Math.ceil((GameView.screenHeight / 25)) - 6));
+            bricks.get(i)[3] = 40 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25))) + ((float) (Math.ceil((GameView.screenHeight / 25)) - 6));
             bricks.get(i)[5] = 0;
 
             btl = new Point((int) bricks.get(i)[0], (int) bricks.get(i)[1]);
@@ -96,7 +100,7 @@ public class Brick {
             float dx = ((float) CharacterSprite.x + (float) (GameView.imageWidth / 2)) - center.x;
             float dy = ((float) CharacterSprite.y + (float) (GameView.imageWidth / 2)) - center.y;
 
-            if(CharacterSprite.playerRect != null) {
+            if(CharacterSprite.playerRect != null && !GameView.isPaused) {
                 if (Math.abs(dx) <= w && Math.abs(dy) <= h && bricks.get(i)[4] != 0) {
                     /* collision! */
                     float wy = w * dy;

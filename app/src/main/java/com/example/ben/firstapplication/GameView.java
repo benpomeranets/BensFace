@@ -18,6 +18,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
 
+    public static boolean hasPlayedBefore = false;
+
     private CharacterSprite characterSprite;
 
     private Platform platform;
@@ -72,11 +74,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        for(int i = 0; i < Brick.maxBricks; i ++){
-            Brick.bricks.add(new float[7]);
-            Brick.bricks.get(i)[4] = 3;
-            Brick.bricks.get(i)[6] = 0;
-        }
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
         characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.tennisball), imageWidth);
         sling = new Sling(slinging);
@@ -90,7 +87,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder){
+        isPaused = true;
         boolean retry = true;
+        hasPlayedBefore = true;
+
         while (retry){
             try {
                 thread.setRunning(false);
@@ -120,6 +120,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             CharacterSprite.y += yVelocity;
 
         }
+
         if ((CharacterSprite.x >= screenWidth - imageWidth)) {
            // synchronized(this) {
                 CharacterSprite.x = screenWidth - GameView.imageWidth - 1;

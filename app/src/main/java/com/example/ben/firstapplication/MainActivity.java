@@ -37,7 +37,6 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     public boolean onTouchEvent(MotionEvent event) {
 
         if(event.getAction() == MotionEvent.ACTION_UP && GameView.started){
-            GameView.isPaused = false;
             isDraggingPlatform = false;
         }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength >= Sling.maxLineLength){
             synchronized (this){

@@ -32,7 +32,7 @@ public class Platform {
             canStartDragging = true;
         }
 
-        if(GameView.started && canStartDragging) {
+        if(GameView.started && canStartDragging && !GameView.isPaused) {
             platformVel = ((float) MainActivity.mouseX - platformX) / 3;
             platformX += platformVel;
         }
