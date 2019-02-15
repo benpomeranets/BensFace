@@ -29,7 +29,11 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(new GameView(this));
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        try {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }catch(Exception e){
+            System.exit(0);
+        }
         gestureDetectorCompat = new GestureDetectorCompat(this, this);
     }
 
@@ -87,8 +91,6 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
            // GameView.isPaused = true;
         }else*/ if(!GameView.started){
             GameView.slinging = true;
-        }else{
-            isDraggingPlatform = true;
         }
 
         return false;
@@ -115,7 +117,7 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
         }
 
         if(GameView.started) {
-
+            isDraggingPlatform = true;
         }
 
         return false;
@@ -130,4 +132,5 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
         return false;
     }
+
 }

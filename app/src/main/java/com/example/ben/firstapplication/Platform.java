@@ -17,7 +17,7 @@ public class Platform {
 
     private static float platformHeightOffGround;
 
-    private static boolean canStartDragging = false;
+    public static boolean canStartDragging = false;
 
     public void draw(Canvas canvas){
 
@@ -33,7 +33,7 @@ public class Platform {
         }
 
         if(GameView.started && canStartDragging && !GameView.isPaused) {
-            platformVel = ((float) MainActivity.mouseX - platformX) / 3;
+            platformVel = ((float) MainActivity.mouseX - platformX) / 2;
             platformX += platformVel;
         }
 

@@ -1,6 +1,7 @@
 package com.example.ben.firstapplication;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,11 +19,17 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
 
+    public static boolean gameIsDone = false;
+
+    public static boolean gameBeat = false;
+
     public static boolean hasPlayedBefore = false;
 
     private CharacterSprite characterSprite;
 
     private Platform platform;
+
+    private Text text;
 
     private Sling sling;
 
@@ -45,8 +52,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public static double xVelocity = 100;
     public static double yVelocity = 100;
 
-    public static int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-    public static int screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+    public static int screenWidth;
+
+    public static int screenHeight;
 
     public static int[] centerX = new int[2];
 
@@ -74,12 +82,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-
+        screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         for (int i = 0; i < Brick.maxBricks; i++) {
-                Brick.bricks.add(new float[7]);
-                Brick.bricks.get(i)[4] = 3;
-                Brick.bricks.get(i)[6] = 0;
-
+            Brick.bricks.add(new float[7]);
+            Brick.bricks.get(i)[4] = 3;
+            Brick.bricks.get(i)[6] = 0;
         }
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
         characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.tennisball), imageWidth);
@@ -87,6 +95,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         brick = new Brick();
         platform = new Platform();
         pause = new Pause();
+        text = new Text();
         // Will  change the third parameter (projectedSling) once you create the image for it.need to
         thread.setRunning(true);
         thread.start();
@@ -94,10 +103,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder){
-        isPaused = true;
         boolean retry = true;
-        hasPlayedBefore = true;
-
         while (retry){
             try {
                 thread.setRunning(false);
@@ -108,7 +114,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
             retry = false;
         }
-        //System.exit(0);
+        System.exit(0);
     }
 
     public void update(){
@@ -160,6 +166,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             yVelocity = yVelocity * -1;
         }
 
+        if(CharacterSprite.y + imageWidth >= screenHeight && !gameBeat){
+            restartGame();
+        }else if(gameBeat){
+            restartGame();
+        }
+
         /*if(Math.abs(xVelocity) <= 0.5 || Math.abs(yVelocity) <= 0.5 && started && !slinging){
             started = false;
             isPaused = false;
@@ -180,7 +192,29 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(started){
             platform.draw(canvas);
         }
-        pause.draw(canvas);
+
+        if(!gameIsDone) {
+            pause.draw(canvas);
+            text.draw(canvas);
+        }else if(gameIsDone){
+            text.draw(canvas);
+            pause.draw(canvas);
+        }
+    }
+
+    public static void restartGame(){
+        for (int i = 0; i < Brick.maxBricks; i++) {
+            Brick.bricks.add(new float[7]);
+            Brick.bricks.get(i)[4] = 3;
+            Brick.bricks.get(i)[6] = 0;
+        }
+        isPaused = false;
+        started = false;
+        slinging = false;
+        MainActivity.isDraggingPlatform = false;
+        Platform.canStartDragging = false;
+        CharacterSprite.x = GameView.centerX[0];
+        CharacterSprite.y = GameView.centerX[1];
     }
 
 }

@@ -118,6 +118,7 @@ public class Brick {
                                 /* on the left */
                                 bricks.get(i)[4] -= 1;
                                 GameView.xVelocity *= -1;
+
                             }
                         }
                     }else{

@@ -44,6 +44,11 @@ public class Sling{
             lineLength = 0;
         }
 
+        if(!GameView.slinging){
+            lineLength = 0;
+            lineIsGrowing = "false";
+        }
+
         canvas.save();
         canvas.translate((float) CharacterSprite.x  + (float) (GameView.imageWidth / 2), (float) CharacterSprite.y + (float) (GameView.imageWidth / 2));
         canvas.rotate(-90 + (float) Math.toDegrees(constrainedAngle));
