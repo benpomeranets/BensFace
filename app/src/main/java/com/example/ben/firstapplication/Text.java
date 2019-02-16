@@ -24,7 +24,7 @@ public class Text {
         }
 
         if(Brick.bricks.get(Brick.bricksInvisible) != null) {
-            canvas.drawRect(0, 0, GameView.screenWidth, Brick.bricks.get(Brick.bricksInvisible)[1] - 35, paint);
+            canvas.drawRect(0, 0, GameView.screenWidth, 5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25))), paint);
         }
 
         if(Platform.platformRect != null) {

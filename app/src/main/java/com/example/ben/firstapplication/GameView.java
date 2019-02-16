@@ -17,6 +17,8 @@ import android.widget.LinearLayout;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
+    Paint gameOverPaint;
+
     public static boolean slinging = false;
 
     private MainThread thread;
@@ -86,6 +88,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             Brick.bricks.add(new float[7]);
             Brick.bricks.get(i)[4] = 3;
             Brick.bricks.get(i)[6] = 0;
+        }
+        if(Text.bottomRect != null && Brick.bricks.get(1) != null) {
+            gameOverRect = new RectF(0, Brick.bricks.get(Brick.bricksInvisible)[1] - 35, GameView.screenWidth, Text.bottomRect.top);
         }
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
         characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.tennisball), imageWidth);
@@ -174,7 +179,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         }
 
         if(CharacterSprite.playerRect != null && Text.bottomRect != null) {
-            if (CharacterSprite.playerRect.intersect(Text.bottomRect) || gameBeat) {
+            if (CharacterSprite.playerRect.intersect(Text.bottomRect) || gameBeat && !gameIsDone) {
                 gameIsDone = true;
             }
         }
@@ -184,32 +189,26 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public void draw(Canvas canvas){
         super.draw(canvas);
         canvas.drawColor(Color.rgb(45, 167, 188));
-        brick.draw(canvas);
+        text.draw(canvas);
+        if(!gameIsDone) {
+            brick.draw(canvas);
+        }
         if(canvas != null){
-            text.draw(canvas);
-            if(CharacterSprite.y + imageWidth < screenHeight || !gameBeat) {
+            if((CharacterSprite.y + imageWidth < screenHeight || !gameBeat) && !gameIsDone) {
                 characterSprite.draw(canvas);
             }
-            if(slinging) {
+            if(slinging && !gameIsDone) {
                 sling.draw(canvas);
             }
         }
-        platform.draw(canvas);
-        if(gameIsDone) {
-            gameOverRect = new RectF(0, Brick.bricks.get(Brick.bricksInvisible)[1] - 35, GameView.screenWidth, Text.bottomRect.top);
-            Paint paint = new Paint();
-            paint.setStyle(Paint.Style.FILL);
-            paint.setColor(Color.rgb(234, 160, 104));
-            canvas.drawRect(gameOverRect, paint);
+        if(!gameIsDone) {
+            platform.draw(canvas);
         }
+
     }
 
     public static void restartGame(){
-        for (int i = 0; i < Brick.maxBricks; i++) {
-            Brick.bricks.add(new float[7]);
-            Brick.bricks.get(i)[4] = 3;
-            Brick.bricks.get(i)[6] = 0;
-        }
+        Brick.restartArray();
         isPaused = false;
         started = false;
         slinging = false;

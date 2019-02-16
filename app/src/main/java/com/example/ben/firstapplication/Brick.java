@@ -29,8 +29,6 @@ public class Brick {
 
     public static RectF brickRect;
 
-    private Runnable once;
-
     public void draw(Canvas canvas) {
 
         ptl = new Point((int) CharacterSprite.x, (int) CharacterSprite.y);
@@ -128,4 +126,12 @@ public class Brick {
 
     }
 
+    public static void restartArray(){
+        bricks = new ArrayList<float[]>();
+        for (int i = 0; i < Brick.maxBricks; i++) {
+            Brick.bricks.add(new float[7]);
+            Brick.bricks.get(i)[4] = 3;
+            Brick.bricks.get(i)[6] = 0;
+        }
+    }
 }

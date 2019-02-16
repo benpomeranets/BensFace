@@ -35,6 +35,9 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
             System.exit(0);
         }
         gestureDetectorCompat = new GestureDetectorCompat(this, this);
+        getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
+                WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED);
     }
 
     @Override
@@ -64,10 +67,6 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
             Sling.lineLength = 0;
         }
 
-        if(GameView.gameIsDone){
-            GameView.restartGame();
-        }
-
         gestureDetectorCompat.onTouchEvent(event);
 
         return super.onTouchEvent(event);
@@ -86,6 +85,10 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     @Override
     public boolean onDoubleTapEvent(MotionEvent e) {
+        if(GameView.gameIsDone){
+            GameView.gameIsDone = false;
+            GameView.restartGame();
+        }
         return false;
     }
 
