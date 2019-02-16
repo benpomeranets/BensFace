@@ -17,6 +17,8 @@ public class Brick {
 
     Point ptl, ptr, pbl, pbr;
 
+    public static int bricksInvisible = 20;
+
     public static List<float[]> bricks = new ArrayList<float[]>();
 
     public static int maxBricks = 130;
@@ -31,8 +33,6 @@ public class Brick {
 
     public void draw(Canvas canvas) {
 
-        Point btl, btr, bbl, bbr, center;
-
         ptl = new Point((int) CharacterSprite.x, (int) CharacterSprite.y);
         ptr = new Point((int) CharacterSprite.x + (int) GameView.imageWidth, (int) CharacterSprite.y);
         pbl = new Point((int) CharacterSprite.x, (int) CharacterSprite.y + (int) (GameView.imageWidth));
@@ -40,7 +40,7 @@ public class Brick {
 
         for (int i = 0; i < bricks.size(); i++) {
 
-            if(i <= 10 || i % 10 == 0 || i % 10 == 9 || i >= maxBricks - 9){
+            if(i <= bricksInvisible || i % 10 == 0 || i % 10 == 9 || i >= maxBricks - 9){
                 bricks.get(i)[4] = 0;
             }
 
@@ -51,16 +51,7 @@ public class Brick {
             bricks.get(i)[3] = 40 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25))) + ((float) (Math.ceil((GameView.screenHeight / 25)) - 6));
             bricks.get(i)[5] = 0;
 
-            btl = new Point((int) bricks.get(i)[0], (int) bricks.get(i)[1]);
-            btr = new Point((int) bricks.get(i)[2], (int) bricks.get(i)[1]);
-            bbl = new Point((int) bricks.get(i)[0], (int) bricks.get(i)[3]);
-            bbr = new Point((int) bricks.get(i)[2], (int) bricks.get(i)[3]);
-
-            center = new Point((int) ((bricks.get(i)[0] + bricks.get(i)[2]) / 2), (int) ((bricks.get(i)[1] + bricks.get(i)[3]) / 2));
-
-            //angle = ((float) Math.atan2(((float) mouseY) - ((float) (CharacterSprite.y) + (float) (GameView.imageWidth / 2)), ((float) mouseX) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
-
-
+            Point center = new Point((int) ((bricks.get(i)[0] + bricks.get(i)[2]) / 2), (int) ((bricks.get(i)[1] + bricks.get(i)[3]) / 2));
 
             //the brick rectangle
             brickRect = new RectF((float) bricks.get(i)[0], (float) bricks.get(i)[1], (float) bricks.get(i)[2], (float) bricks.get(i)[3]);
@@ -87,13 +78,7 @@ public class Brick {
                 canvas.drawRect(brickRect, paint);
             }
 
-            /*float angle_from_bottom_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
-            float angle_from_bottom_right = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[3])), ((float) center.x) - ((float) (bricks.get(i)[2]))));
-            float angle_from_top_left = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[1])), ((float) center.x) - ((float) (bricks.get(i)[0]))));
-            float angle_from_top_right = ((float) Math.atan2(((float) center.y) - ((float) (bricks.get(i)[1])), ((float) center.x) - ((float) (bricks.get(i)[2]))));
-
-            float angle_between_centroids = ((float) Math.atan2(((float) center.y) - (float) (CharacterSprite.y + (GameView.imageWidth / 2)),
-                ((float) center.x) - ((float) (CharacterSprite.x + (GameView.imageWidth / 2)))));*/
+            //collision detection using MINKOWSKI SUM
 
             float w = (float) 0.5 * ((float) GameView.imageWidth + brickWidth);
             float h = (float) 0.5 * ((float) GameView.imageWidth + brickHeight);

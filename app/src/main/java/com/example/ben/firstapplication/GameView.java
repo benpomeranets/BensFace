@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.graphics.Color;
@@ -19,11 +21,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
 
-    public static boolean gameIsDone = false;
-
     public static boolean gameBeat = false;
-
-    public static boolean hasPlayedBefore = false;
 
     private CharacterSprite characterSprite;
 
@@ -35,8 +33,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     private Brick brick;
 
-    private Pause pause;
-
     public static boolean isPaused = false;
 
     //double gravity;
@@ -45,9 +41,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static boolean started = false;
 
-    public static double speed = 15;
+    public static double speed = 18;
 
-    public static boolean canStartDragging = false;
+    public static boolean gameIsDone = false;
 
     public static double xVelocity = 100;
     public static double yVelocity = 100;
@@ -59,6 +55,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public static int[] centerX = new int[2];
 
     public static float screenWidthToHeightRatio;
+
+    public static RectF gameOverRect;
 
     float platFormToBallAngle;
 
@@ -94,7 +92,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         sling = new Sling(slinging);
         brick = new Brick();
         platform = new Platform();
-        pause = new Pause();
         text = new Text();
         // Will  change the third parameter (projectedSling) once you create the image for it.need to
         thread.setRunning(true);
@@ -153,9 +150,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
                 platFormToBallAngle = ((float) Math.atan2(((float) Platform.platformRect.bottom) - ((float) (CharacterSprite.y + (float) (GameView.imageWidth / 2))), ((float) Platform.platformRect.centerX()) - ((float) (CharacterSprite.x) + (float) (GameView.imageWidth / 2))));
 
+                if((float) Math.toDegrees(platFormToBallAngle) > -30 && (float) Math.toDegrees(platFormToBallAngle) < 0){
+                    platFormToBallAngle = (float) Math.toRadians(-30);
+                }else if((float) Math.toDegrees(platFormToBallAngle) < 30 && (float) Math.toDegrees(platFormToBallAngle) > 0) {
+                    platFormToBallAngle = (float) Math.toRadians(30);
+                }else if((float) Math.toDegrees(platFormToBallAngle) > 150){
+                    platFormToBallAngle = (float) Math.toRadians(150);
+                }else if((float) Math.toDegrees(platFormToBallAngle) < -150){
+                    platFormToBallAngle = (float) Math.toRadians(-150);
+                }
+
                 synchronized(this) {
                     CharacterSprite.y = platform.platformRect.top - (GameView.imageWidth + 1);
-                    GameView.xVelocity = (float) GameView.speed * (float) Math.cos((double) platFormToBallAngle) * -1;
+                    GameView.xVelocity = (float) GameView.speed * (float) Math.cos((double) platFormToBallAngle);
                     GameView.yVelocity = (float) GameView.speed * (float) Math.sin((double) platFormToBallAngle) * -1;
                 }
             }
@@ -166,16 +173,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             yVelocity = yVelocity * -1;
         }
 
-        if(CharacterSprite.y + imageWidth >= screenHeight && !gameBeat){
-            restartGame();
-        }else if(gameBeat){
-            restartGame();
+        if(CharacterSprite.playerRect != null && Text.bottomRect != null) {
+            if (CharacterSprite.playerRect.intersect(Text.bottomRect) || gameBeat) {
+                gameIsDone = true;
+            }
         }
-
-        /*if(Math.abs(xVelocity) <= 0.5 || Math.abs(yVelocity) <= 0.5 && started && !slinging){
-            started = false;
-            isPaused = false;
-        }*/
     }
 
     @Override
@@ -184,21 +186,21 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawColor(Color.rgb(45, 167, 188));
         brick.draw(canvas);
         if(canvas != null){
-            characterSprite.draw(canvas);
+            text.draw(canvas);
+            if(CharacterSprite.y + imageWidth < screenHeight || !gameBeat) {
+                characterSprite.draw(canvas);
+            }
             if(slinging) {
                 sling.draw(canvas);
             }
         }
-        if(started){
-            platform.draw(canvas);
-        }
-
-        if(!gameIsDone) {
-            pause.draw(canvas);
-            text.draw(canvas);
-        }else if(gameIsDone){
-            text.draw(canvas);
-            pause.draw(canvas);
+        platform.draw(canvas);
+        if(gameIsDone) {
+            gameOverRect = new RectF(0, Brick.bricks.get(Brick.bricksInvisible)[1] - 35, GameView.screenWidth, Text.bottomRect.top);
+            Paint paint = new Paint();
+            paint.setStyle(Paint.Style.FILL);
+            paint.setColor(Color.rgb(234, 160, 104));
+            canvas.drawRect(gameOverRect, paint);
         }
     }
 
@@ -211,8 +213,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         isPaused = false;
         started = false;
         slinging = false;
+        gameIsDone = false;
         MainActivity.isDraggingPlatform = false;
         Platform.canStartDragging = false;
+        Platform.platformX = GameView.screenWidth / 2;
         CharacterSprite.x = GameView.centerX[0];
         CharacterSprite.y = GameView.centerX[1];
     }

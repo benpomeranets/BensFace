@@ -40,9 +40,9 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-        if(event.getAction() == MotionEvent.ACTION_UP && GameView.started){
+        if(event.getAction() == MotionEvent.ACTION_UP && GameView.started && !GameView.gameIsDone){
             isDraggingPlatform = false;
-        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength >= Sling.maxLineLength){
+        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength >= Sling.maxLineLength && !GameView.gameIsDone){
             synchronized (this){
 
                 GameView.started = true;
@@ -56,13 +56,16 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
                 Sling.lineIsGrowing = "false";
             }
-        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength < Sling.maxLineLength){
+        }else if(event.getAction() == MotionEvent.ACTION_UP && GameView.slinging && Sling.lineLength < Sling.maxLineLength && !GameView.gameIsDone){
             GameView.started = false;
             GameView.slinging = false;
 
             Sling.lineIsGrowing = "false";
             Sling.lineLength = 0;
+        }
 
+        if(GameView.gameIsDone){
+            GameView.restartGame();
         }
 
         gestureDetectorCompat.onTouchEvent(event);
@@ -72,6 +75,7 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     @Override
     public boolean onSingleTapConfirmed(MotionEvent e) {
+
         return false;
     }
 
@@ -87,9 +91,8 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     @Override
     public boolean onDown(MotionEvent e) {
-        /*if(GameView.started) {
-           // GameView.isPaused = true;
-        }else*/ if(!GameView.started){
+
+        if(!GameView.started){
             GameView.slinging = true;
         }
 

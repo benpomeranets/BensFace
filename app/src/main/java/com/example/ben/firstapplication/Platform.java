@@ -15,7 +15,7 @@ public class Platform {
 
     public static float platformWidth = 175, platformHeight = 30;
 
-    private static float platformHeightOffGround;
+    public static float platformHeightOffGround;
 
     public static boolean canStartDragging = false;
 
@@ -28,18 +28,23 @@ public class Platform {
         platformRect = new RectF(platformX - (platformWidth / 2), GameView.screenHeight - (platformHeight + platformHeightOffGround), platformX + (platformWidth / 2),
                 GameView.screenHeight - platformHeightOffGround);
 
-        if(CharacterSprite.y + GameView.imageWidth < GameView.screenHeight - (platformHeight + platformHeightOffGround) - 5 && !canStartDragging && MainActivity.isDraggingPlatform){
-            canStartDragging = true;
+        if(GameView.started) {
+
+            if (CharacterSprite.y + GameView.imageWidth < GameView.screenHeight - (platformHeight + platformHeightOffGround) - 5 && !canStartDragging && MainActivity.isDraggingPlatform) {
+                canStartDragging = true;
+            }
+
+            if (GameView.started && canStartDragging && !GameView.isPaused) {
+                platformVel = ((float) MainActivity.mouseX - platformX) / 2;
+                platformX += platformVel;
+            }
+
+            Paint paint = new Paint();
+            paint.setColor(Color.rgb(234, 105, 105));
+            paint.setStyle(Paint.Style.FILL);
+            canvas.drawRect(platformRect, paint);
+
         }
 
-        if(GameView.started && canStartDragging && !GameView.isPaused) {
-            platformVel = ((float) MainActivity.mouseX - platformX) / 2;
-            platformX += platformVel;
-        }
-
-        Paint paint = new Paint();
-        paint.setColor(Color.rgb(234, 105, 105));
-        paint.setStyle(Paint.Style.FILL);
-        canvas.drawRect(platformRect, paint);
     }
 }
