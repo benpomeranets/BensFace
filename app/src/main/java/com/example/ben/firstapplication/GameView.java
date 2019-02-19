@@ -1,23 +1,16 @@
 package com.example.ben.firstapplication;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
-
-    Paint gameOverPaint;
 
     public static boolean slinging = false;
 
@@ -37,13 +30,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static boolean isPaused = false;
 
-    //double gravity;
-
     public static int imageWidth = 50;
 
     public static boolean started = false;
 
-    public static double speed = 18;
+    public static double speed = 21;
 
     public static boolean gameIsDone = false;
 
@@ -53,6 +44,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public static int screenWidth;
 
     public static int screenHeight;
+
+    public static int score;
 
     public static int[] centerX = new int[2];
 
@@ -72,7 +65,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
         setFocusable(true);
 
-        //gravity = 0.97;
     }
 
     @Override
@@ -82,6 +74,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        score = 0;
         screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         for (int i = 0; i < Brick.maxBricks; i++) {
@@ -165,6 +158,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     platFormToBallAngle = (float) Math.toRadians(-150);
                 }
 
+                Text.scoreIncrease = (int)((Text.bricksHit - 1) * (1.5));
+                score += (int)((Text.bricksHit - 1) * (1.5));
+                Text.scoreAlpha = 250;
+                Text.bricksHit = 0;
+
                 synchronized(this) {
                     CharacterSprite.y = platform.platformRect.top - (GameView.imageWidth + 1);
                     GameView.xVelocity = (float) GameView.speed * (float) Math.cos((double) platFormToBallAngle);
@@ -176,6 +174,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(CharacterSprite.y <= 0){
             CharacterSprite.y = 1;
             yVelocity = yVelocity * -1;
+        }
+
+        if(Brick.bricksLeft == 0){
+            gameBeat = true;
         }
 
         if(CharacterSprite.playerRect != null && Text.bottomRect != null) {
@@ -208,6 +210,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public static void restartGame(){
+        Text.scoreIncrease = 0;
+        Text.scoreAlpha = 0;
+        Text.bricksHit = 0;
+        score = 0;
         Brick.restartArray();
         isPaused = false;
         started = false;

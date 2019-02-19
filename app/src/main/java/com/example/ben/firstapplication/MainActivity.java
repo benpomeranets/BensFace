@@ -24,6 +24,15 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
     public static boolean isDraggingPlatform = false;
 
     @Override
+    public boolean onDoubleTapEvent(MotionEvent e) {
+        if(GameView.gameIsDone){
+            GameView.gameIsDone = false;
+            GameView.restartGame();
+        }
+        return false;
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -80,15 +89,6 @@ public class MainActivity extends Activity implements GestureDetector.OnDoubleTa
 
     @Override
     public boolean onDoubleTap(MotionEvent e) {
-        return false;
-    }
-
-    @Override
-    public boolean onDoubleTapEvent(MotionEvent e) {
-        if(GameView.gameIsDone){
-            GameView.gameIsDone = false;
-            GameView.restartGame();
-        }
         return false;
     }
 
