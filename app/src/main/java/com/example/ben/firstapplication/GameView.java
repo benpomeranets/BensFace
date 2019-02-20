@@ -1,11 +1,13 @@
 package com.example.ben.firstapplication;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.preference.PreferenceManager;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.graphics.Color;
@@ -57,6 +59,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     float platFormToBallAngle;
 
+    private static SharedPreferences prefs;
+
+    private static SharedPreferences.Editor editor;
+
+    public static SharedPreferences savedValues;
+
     public GameView(Context context){
 
         super(context);
@@ -76,6 +84,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        savedValues = PreferenceManager.getDefaultSharedPreferences(getContext());
+        editor = prefs.edit();
+        highscore = savedValues.getInt("highscore", 0);
+
         score = 0;
         screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
         screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
@@ -100,6 +113,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder){
+        editor.putInt("highscore", highscore);
+        editor.commit();
+
         boolean retry = true;
         while (retry){
             try {

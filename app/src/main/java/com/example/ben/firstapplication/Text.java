@@ -73,12 +73,12 @@ public class Text {
 
         }
 
-        if(GameView.gameIsDone){
+        if(GameView.gameIsDone && GameView.score != 0){
             paint.setColor(Color.WHITE);
             paint.setTextSize(GameView.screenWidth / 10);
             paint.setTextAlign(Paint.Align.CENTER);
 
-            if(!GameView.gameBeat) {
+            if(!GameView.gameBeat ) {
                 canvas.drawText("Game over!", GameView.screenWidth / 2,
             (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (paint.getTextSize()), paint);
             }else{

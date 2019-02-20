@@ -27,12 +27,12 @@ public class Sling{
     }
 
     public void draw(Canvas canvas){
-        if(CharacterSprite.angle >= (float) -2.44346095 && CharacterSprite.angle <= (float) -0.698131701 && !GameView.isPaused){
+        if(CharacterSprite.angle >= (float) -2.70526034 && CharacterSprite.angle <= (float) -0.436332 && !GameView.isPaused){
             constrainedAngle = CharacterSprite.angle;
-        }else if(CharacterSprite.angle < (float) -2.44346095 && !GameView.isPaused){
-            constrainedAngle = (float) -2.44346095;
-        }else if(CharacterSprite.angle > (float) -0.698131701 && !GameView.isPaused){
-            constrainedAngle = (float) -0.698131701;
+        }else if(CharacterSprite.angle < (float) -2.70526034 && !GameView.isPaused){
+            constrainedAngle = (float) -2.70526034;
+        }else if(CharacterSprite.angle > (float) -0.436332 && !GameView.isPaused){
+            constrainedAngle = (float) -0.436332;
         }
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.rgb(234, 105, 105));
