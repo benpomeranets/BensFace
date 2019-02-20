@@ -5,13 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Typeface;
+
 
 public class Text {
 
-    public Text(){
+    public static Bitmap originalLogo;
 
-    }
+    private static Bitmap scaledLogo;
 
     public static int scoreIncrease = 0;
 
@@ -25,9 +25,20 @@ public class Text {
 
     public static boolean scoreIsVisible = false;
 
-    private static Bitmap originalLogo;
-
     Paint paint = new Paint();
+
+    float imageWidthFloat = (float) (GameView.screenWidth * 0.66);
+
+    float imageHeightFloat = (float) (imageWidthFloat * 0.19168900804);
+
+    int imageWidth =  Math.round(imageWidthFloat);
+
+    int imageHeight = Math.round(imageHeightFloat);
+
+    public Text(Bitmap img) {
+        originalLogo = img;
+        scaledLogo = Bitmap.createScaledBitmap(img, imageWidth, imageHeight, true);
+    }
 
     public void draw(Canvas canvas){
 
@@ -87,17 +98,20 @@ public class Text {
             }
 
             canvas.drawText("Score: " + GameView.score, GameView.screenWidth / 2,
-        (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (2.5 * paint.getTextSize()), paint);
+        (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (2.8 * paint.getTextSize()), paint);
 
             canvas.drawText("High score: " + GameView.highscore, GameView.screenWidth / 2,
-        (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (4.0 * paint.getTextSize()), paint);
+        (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (4.6 * paint.getTextSize()), paint);
 
             canvas.drawText("Double tap to play", GameView.screenWidth / 2,
-        (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (5.5 * paint.getTextSize()), paint);
+        (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (6.4 * paint.getTextSize()), paint);
 
             canvas.drawText("again.", GameView.screenWidth / 2,
-        (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (6.65 * paint.getTextSize()), paint);
+        (5 + (float) (Math.ceil(Brick.bricksInvisible / 10) * (float) (Math.ceil(GameView.screenHeight / 25)))) + (GameView.screenHeight / 25) + paint.getTextSize() / 2 + (int) (7.55 * paint.getTextSize()), paint);
         }
 
+        if(bottomRect != null) {
+            canvas.drawBitmap(scaledLogo, (GameView.screenWidth - scaledLogo.getWidth()) / 2, (bottomRect.top) + ((scaledLogo.getHeight()) / 3), null);
+        }
     }
 }

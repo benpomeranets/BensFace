@@ -3,6 +3,7 @@ package com.example.ben.firstapplication;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -34,8 +35,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static boolean isPaused = false;
 
-    public static int imageWidth = 50;
-
     public static boolean started = false;
 
     public static double speed = 21;
@@ -56,6 +55,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     public static float screenWidthToHeightRatio;
 
     public static RectF gameOverRect;
+
+    public static int imageWidth = 50;
 
     float platFormToBallAngle;
 
@@ -101,11 +102,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             gameOverRect = new RectF(0, Brick.bricks.get(Brick.bricksInvisible)[1] - 35, GameView.screenWidth, Text.bottomRect.top);
         }
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
-        characterSprite = new CharacterSprite(BitmapFactory.decodeResource(getResources(), R.drawable.tennisball), imageWidth);
+        characterSprite = new CharacterSprite(imageWidth);
         sling = new Sling(slinging);
         brick = new Brick();
         platform = new Platform();
-        text = new Text();
+        text = new Text(BitmapFactory.decodeResource(getResources(), R.drawable.logo));
         // Will  change the third parameter (projectedSling) once you create the image for it.need to
         thread.setRunning(true);
         thread.start();
@@ -191,15 +192,16 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             yVelocity = yVelocity * -1;
         }
 
-        if(Brick.bricksLeft <= 0 && Text.bricksHit > 0){
+        if(Brick.bricksLeft <= 0){
             gameBeat = true;
             if(score > highscore){
                 highscore = score;
             }
+            gameIsDone = true;
         }
 
         if(CharacterSprite.playerRect != null && Text.bottomRect != null) {
-            if (CharacterSprite.playerRect.intersect(Text.bottomRect) || gameBeat && !gameIsDone) {
+            if (CharacterSprite.playerRect.intersect(Text.bottomRect)) {
                 gameIsDone = true;
                 if(score > highscore){
                     highscore = score;
@@ -235,6 +237,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public static void restartGame(){
+        Brick.bricksLeft = (int) ((Brick.maxBricks - (Brick.bricksInvisible + 10)) * (0.8) * Brick.lives);
         Text.scoreIncrease = 0;
         Text.scoreAlpha = 0;
         Text.bricksHit = 0;
@@ -244,6 +247,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         started = false;
         slinging = false;
         gameIsDone = false;
+        gameBeat = false;
         MainActivity.isDraggingPlatform = false;
         Platform.canStartDragging = false;
         Platform.platformX = GameView.screenWidth / 2;

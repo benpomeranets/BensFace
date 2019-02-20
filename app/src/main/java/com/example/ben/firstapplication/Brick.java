@@ -31,7 +31,7 @@ public class Brick {
 
     public static int lives = 3;
 
-    public static int bricksLeft = (maxBricks - bricksInvisible) * lives;
+    public static int bricksLeft = (int) ((Brick.maxBricks - (Brick.bricksInvisible + 10)) * (0.8) * Brick.lives);
 
     public static RectF brickRect;
 
@@ -44,7 +44,7 @@ public class Brick {
 
         for (int i = 0; i < bricks.size(); i++) {
 
-            if(i <= bricksInvisible || i % 10 == 0 || i % 10 == 9 || i >= maxBricks - 9){
+            if(i <= bricksInvisible || i % 10 == 0 || i % 10 == 9 || i >= maxBricks - 9 && bricks.get(i)[4] != 0){
                 bricks.get(i)[4] = 0;
             }
 

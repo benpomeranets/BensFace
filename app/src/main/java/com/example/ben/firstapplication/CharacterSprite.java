@@ -18,7 +18,7 @@ public class CharacterSprite {
 
     public static RectF playerRect;
 
-    CharacterSprite(Bitmap bmp, int imageWidth) {
+    CharacterSprite(int imageWidth) {
 
         GameView.centerX[0] = Math.round((GameView.screenWidth / 2) - (imageWidth / 2));
 
