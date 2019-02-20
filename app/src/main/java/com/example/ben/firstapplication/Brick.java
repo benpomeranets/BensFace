@@ -23,11 +23,15 @@ public class Brick {
 
     public static int maxBricks = 130;
 
+    Paint paint = new Paint();
+
     public Brick(){
 
     }
 
-    public static int bricksLeft = maxBricks - bricksInvisible;
+    public static int lives = 3;
+
+    public static int bricksLeft = (maxBricks - bricksInvisible) * lives;
 
     public static RectF brickRect;
 
@@ -58,8 +62,6 @@ public class Brick {
 
             float brickHeight = bricks.get(i)[3] - bricks.get(i)[1];
             float brickWidth = bricks.get(i)[2] - bricks.get(i)[0];
-
-            Paint paint = new Paint();
 
             if(bricks.get(i)[4] >= 3) {
                 paint.setColor(Color.rgb(104, 130, 135));
@@ -97,56 +99,56 @@ public class Brick {
                         if (wy > -hx) {
                             /* on the top */
                             if(GameView.yVelocity < 0) {
+                                if(Text.bricksHit < 11){
+                                    Text.bricksHit ++;
+                                }
                                 bricks.get(i)[4] -= 1; //deleting the brick
                                 GameView.yVelocity *= -1; //changing directions
-                                GameView.score += 5;
                                 Text.scoreAlpha = 250;
-                                Text.scoreIncrease = 5;
-                                Text.bricksHit ++;
-                                if(bricks.get(i)[4] == 0){
-                                    bricksLeft --;
-                                }
+                                Text.scoreIncrease = 4 + Text.bricksHit;
+                                GameView.score += 4 + Text.bricksHit;
+                                bricksLeft --;
                             }
                         } else {
                             if(GameView.xVelocity > 0) {
                                 /* on the left */
+                                if(Text.bricksHit < 11){
+                                    Text.bricksHit ++;
+                                }
                                 bricks.get(i)[4] -= 1;
                                 GameView.xVelocity *= -1;
-                                GameView.score += 5;
                                 Text.scoreAlpha = 250;
-                                Text.scoreIncrease = 5;
-                                Text.bricksHit ++;
-                                if(bricks.get(i)[4] == 0){
-                                    bricksLeft --;
-                                }
+                                Text.scoreIncrease = 4 + Text.bricksHit;
+                                GameView.score += 4 + Text.bricksHit;
+                                bricksLeft --;
                             }
                         }
                     }else{
                         if (wy > -hx) {
                             /* on the right */
                             if(GameView.xVelocity < 0) {
+                                if(Text.bricksHit < 11){
+                                    Text.bricksHit ++;
+                                }
                                 bricks.get(i)[4] -= 1;
                                 GameView.xVelocity *= -1;
-                                GameView.score += 5;
                                 Text.scoreAlpha = 250;
-                                Text.scoreIncrease = 5;
-                                Text.bricksHit ++;
-                                if(bricks.get(i)[4] == 0){
-                                    bricksLeft --;
-                                }
+                                Text.scoreIncrease = 4 + Text.bricksHit;
+                                GameView.score += 4 + Text.bricksHit;
+                                bricksLeft --;
                             }
                         } else{
                             if(GameView.yVelocity > 0) {
                                 /* at the bottom */
+                                if(Text.bricksHit < 11){
+                                    Text.bricksHit ++;
+                                }
                                 bricks.get(i)[4] -= 1;
                                 GameView.yVelocity *= -1;
-                                GameView.score += 5;
                                 Text.scoreAlpha = 250;
-                                Text.scoreIncrease = 5;
-                                Text.bricksHit ++;
-                                if(bricks.get(i)[4] == 0){
-                                    bricksLeft --;
-                                }
+                                Text.scoreIncrease = 4 + Text.bricksHit;
+                                GameView.score += 4 + Text.bricksHit;
+                                bricksLeft --;
                             }
                         }
                     }

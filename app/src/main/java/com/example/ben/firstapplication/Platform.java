@@ -9,6 +9,8 @@ public class Platform {
 
     public static float platformVel = 0;
 
+    Paint paint = new Paint();
+
     public static float platformX = GameView.screenWidth / 2;
 
     public static RectF platformRect;
@@ -35,11 +37,10 @@ public class Platform {
             }
 
             if (GameView.started && canStartDragging && !GameView.isPaused) {
-                platformVel = ((float) MainActivity.mouseX - platformX) / 2;
+                platformVel = ((float) MainActivity.mouseX - platformX) * 3/2;
                 platformX += platformVel;
             }
 
-            Paint paint = new Paint();
             paint.setColor(Color.rgb(234, 105, 105));
             paint.setStyle(Paint.Style.FILL);
             canvas.drawRect(platformRect, paint);

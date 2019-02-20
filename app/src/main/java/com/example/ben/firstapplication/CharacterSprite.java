@@ -3,13 +3,14 @@ package com.example.ben.firstapplication;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
 
 public class CharacterSprite {
 
     public static float heightAwayFromStart;
+
+    Paint paint = new Paint();
 
     public static double x, y;
 
@@ -18,8 +19,6 @@ public class CharacterSprite {
     public static RectF playerRect;
 
     CharacterSprite(Bitmap bmp, int imageWidth) {
-
-        float imageHeight = imageWidth * GameView.screenWidthToHeightRatio;
 
         GameView.centerX[0] = Math.round((GameView.screenWidth / 2) - (imageWidth / 2));
 
@@ -33,8 +32,6 @@ public class CharacterSprite {
     public void draw(Canvas canvas){
 
         playerRect = new RectF((float) x, (float) y, (float) x + (GameView.imageWidth), (float) y + (float) (GameView.imageWidth));
-
-        Paint paint = new Paint();
         paint.setColor(Color.rgb(234, 239, 249));
         paint.setStyle(Paint.Style.FILL);
         canvas.drawCircle(playerRect.centerX(), playerRect.centerY(), GameView.imageWidth / 2, paint);

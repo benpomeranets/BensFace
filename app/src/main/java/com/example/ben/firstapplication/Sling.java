@@ -20,6 +20,8 @@ public class Sling{
 
     public static float constrainedAngle;
 
+    Paint paint = new Paint();
+
     public Sling(boolean slinging){
         this.visible = slinging;
     }
@@ -32,7 +34,6 @@ public class Sling{
         }else if(CharacterSprite.angle > (float) -0.698131701 && !GameView.isPaused){
             constrainedAngle = (float) -0.698131701;
         }
-        Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.rgb(234, 105, 105));
         paint.setStrokeWidth((int) (GameView.imageWidth / 7));

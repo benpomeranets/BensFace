@@ -4,15 +4,17 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.RectF;
 import android.view.SurfaceView;
 import android.view.SurfaceHolder;
 import android.graphics.Color;
-import android.graphics.Paint;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static boolean slinging = false;
+
+    public static int highscore = 0;
 
     private MainThread thread;
 
@@ -79,7 +81,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         screenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
         for (int i = 0; i < Brick.maxBricks; i++) {
             Brick.bricks.add(new float[7]);
-            Brick.bricks.get(i)[4] = 3;
+            Brick.bricks.get(i)[4] = Brick.lives;
             Brick.bricks.get(i)[6] = 0;
         }
         if(Text.bottomRect != null && Brick.bricks.get(1) != null) {
@@ -158,14 +160,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
                     platFormToBallAngle = (float) Math.toRadians(-150);
                 }
 
-                Text.scoreIncrease = (int)((Text.bricksHit - 1) * (1.5));
-                score += (int)((Text.bricksHit - 1) * (1.5));
-                Text.scoreAlpha = 250;
                 Text.bricksHit = 0;
 
                 synchronized(this) {
                     CharacterSprite.y = platform.platformRect.top - (GameView.imageWidth + 1);
-                    GameView.xVelocity = (float) GameView.speed * (float) Math.cos((double) platFormToBallAngle);
+                    GameView.xVelocity = (float) GameView.speed * (float) Math.cos((double) platFormToBallAngle) * -1;
                     GameView.yVelocity = (float) GameView.speed * (float) Math.sin((double) platFormToBallAngle) * -1;
                 }
             }
@@ -176,13 +175,19 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             yVelocity = yVelocity * -1;
         }
 
-        if(Brick.bricksLeft == 0){
+        if(Brick.bricksLeft <= 0 && Text.bricksHit > 0){
             gameBeat = true;
+            if(score > highscore){
+                highscore = score;
+            }
         }
 
         if(CharacterSprite.playerRect != null && Text.bottomRect != null) {
             if (CharacterSprite.playerRect.intersect(Text.bottomRect) || gameBeat && !gameIsDone) {
                 gameIsDone = true;
+                if(score > highscore){
+                    highscore = score;
+                }
             }
         }
     }
@@ -190,7 +195,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void draw(Canvas canvas){
         super.draw(canvas);
-        canvas.drawColor(Color.rgb(45, 167, 188));
+        if(!gameIsDone) {
+            canvas.drawColor(Color.rgb(45, 167, 188));
+        }else{
+            canvas.drawColor(Color.rgb(232, 141, 67));
+        }
         text.draw(canvas);
         if(!gameIsDone) {
             brick.draw(canvas);
