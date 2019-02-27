@@ -56,7 +56,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
 
     public static RectF gameOverRect;
 
-    public static int imageWidth = 50;
+    public static int imageWidth = 60;
 
     float platFormToBallAngle;
 
@@ -99,7 +99,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
             Brick.bricks.get(i)[6] = 0;
         }
         if(Text.bottomRect != null && Brick.bricks.get(1) != null) {
-            gameOverRect = new RectF(0, Brick.bricks.get(Brick.bricksInvisible)[1] - 35, GameView.screenWidth, Text.bottomRect.top);
+            gameOverRect = new RectF(0, Text.topRect.bottom, GameView.screenWidth, Text.bottomRect.top);
         }
         screenWidthToHeightRatio = (float) (screenHeight) / (float) screenWidth;
         characterSprite = new CharacterSprite(imageWidth);
@@ -195,7 +195,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
         if(Brick.bricksLeft <= 0){
             gameBeat = true;
             if(score > highscore){
-                highscore = score;
+                //highscore = score;
             }
             gameIsDone = true;
         }
@@ -237,7 +237,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     public static void restartGame(){
-        Brick.bricksLeft = (int) ((Brick.maxBricks - (Brick.bricksInvisible + 10)) * (0.8) * Brick.lives);
+        Brick.bricksLeft = (int) ((Brick.maxBricks - (2 * (Brick.rows))) * Brick.lives);
         Text.scoreIncrease = 0;
         Text.scoreAlpha = 0;
         Text.bricksHit = 0;

@@ -17,11 +17,7 @@ public class Brick {
 
     Point ptl, ptr, pbl, pbr;
 
-    public static int bricksInvisible = 20;
-
     public static List<float[]> bricks = new ArrayList<float[]>();
-
-    public static int maxBricks = 130;
 
     Paint paint = new Paint();
 
@@ -31,7 +27,13 @@ public class Brick {
 
     public static int lives = 3;
 
-    public static int bricksLeft = (int) ((Brick.maxBricks - (Brick.bricksInvisible + 10)) * (0.8) * Brick.lives);
+    private static int bricksPerRow = 9;
+
+    public static int rows = 11;
+
+    public static int maxBricks = bricksPerRow * rows;
+
+    public static int bricksLeft = (int) ((maxBricks - (2 * (rows))) * lives);
 
     public static RectF brickRect;
 
@@ -44,15 +46,15 @@ public class Brick {
 
         for (int i = 0; i < bricks.size(); i++) {
 
-            if(i <= bricksInvisible || i % 10 == 0 || i % 10 == 9 || i >= maxBricks - 9 && bricks.get(i)[4] != 0){
+            if(i % bricksPerRow == 0 || i % bricksPerRow == bricksPerRow - 1 && bricks.get(i)[4] != 0){
                 bricks.get(i)[4] = 0;
             }
 
             //the parameters for the bricks
-            bricks.get(i)[0] = 4 + (float) (i % 10) * (float) (Math.ceil(GameView.screenWidth / 10));
-            bricks.get(i)[1] = 40 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25)));
-            bricks.get(i)[2] = 4 + (float) (i % 10) * (float) (Math.ceil(GameView.screenWidth / 10)) + (float) (Math.ceil(GameView.screenWidth / 10)) - 6;
-            bricks.get(i)[3] = 40 + (float) (Math.ceil(i / 10) * (float) (Math.ceil(GameView.screenHeight / 25))) + ((float) (Math.ceil((GameView.screenHeight / 25)) - 6));
+            bricks.get(i)[0] = 4 + (float) (i % bricksPerRow) * (float) (Math.ceil(GameView.screenWidth / bricksPerRow));
+            bricks.get(i)[1] = Text.topRect.bottom + 20 + (float) (Math.ceil(i / bricksPerRow) * (float) (Math.ceil(GameView.screenHeight / 25)));
+            bricks.get(i)[2] = 4 + (float) (i % bricksPerRow) * (float) (Math.ceil(GameView.screenWidth / bricksPerRow)) + (float) (Math.ceil(GameView.screenWidth / bricksPerRow)) - 6;
+            bricks.get(i)[3] = Text.topRect.bottom + 20 + (float) (Math.ceil(i / bricksPerRow) * (float) (Math.ceil(GameView.screenHeight / 25))) + ((float) (Math.ceil((GameView.screenHeight / 25)) - 6));
             bricks.get(i)[5] = 0;
 
             Point center = new Point((int) ((bricks.get(i)[0] + bricks.get(i)[2]) / 2), (int) ((bricks.get(i)[1] + bricks.get(i)[3]) / 2));
@@ -156,7 +158,6 @@ public class Brick {
             }
 
         }
-
     }
 
     public static void restartArray(){
